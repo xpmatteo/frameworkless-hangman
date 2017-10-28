@@ -9,8 +9,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Optional;
+
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -34,4 +37,25 @@ public class CodeBreakerControllerTest {
                 .andExpect(jsonPath("gameId", is("123")))
         ;
     }
+
+    @Test
+    public void findGame() throws Exception {
+        Game game = new Game("xyz");
+        when(gameRepository.findGame("xyz")).thenReturn(Optional.of(game));
+
+        mockMvc.perform(get("/hangout/game/xyz"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("gameId", is("xyz")))
+        ;
+    }
+
+    @Test
+    public void cannotFindGame() throws Exception {
+        when(gameRepository.findGame("aaa")).thenReturn(Optional.empty());
+
+        mockMvc.perform(get("/hangout/game/aaa"))
+                .andExpect(status().isNotFound())
+        ;
+    }
+
 }

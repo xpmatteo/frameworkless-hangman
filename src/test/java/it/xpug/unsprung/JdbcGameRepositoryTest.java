@@ -22,4 +22,6 @@ public class JdbcGameRepositoryTest {
 
         assertThat(game.getGameId(), is("abc123"));
     }
+
+
 }
