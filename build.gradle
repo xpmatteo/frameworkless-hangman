@@ -26,6 +26,8 @@ repositories {
 dependencies {
 	compile 'org.springframework.boot:spring-boot-starter-data-jpa'
 	compile 'org.springframework.boot:spring-boot-starter-web'
-	compile 'mysql:mysql-connector-java:6.0.6'
+    compile 'org.springframework.boot:spring-boot-starter-actuator'
+    compile 'mysql:mysql-connector-java:6.0.6'
+    compile 'org.projectlombok:lombok:1.16.16'
 	testCompile 'org.springframework.boot:spring-boot-starter-test'
 }
