@@ -1,6 +1,9 @@
 package it.xpug.unsprung.domain;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import it.xpug.unsprung.util.ToHexSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,5 +17,6 @@ import javax.persistence.Id;
 public class Game {
     @Id
     @Getter
+    @JsonSerialize(using=ToHexSerializer.class)
     private Long gameId;
 }
