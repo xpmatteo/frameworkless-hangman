@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -30,20 +31,20 @@ public class CodeBreakerControllerTest {
 
     @Test
     public void createNewGame() throws Exception {
-        when(gameRepository.createNewGame()).thenReturn(new Game("123"));
+        when(gameRepository.createNewGame()).thenReturn(new Game(123L));
 
         mockMvc.perform(post("/hangout/game"))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("gameId", is("123")))
+                .andExpect(jsonPath("gameId", is(123)))
         ;
     }
 
     @Test
     public void findGame() throws Exception {
-        Game game = new Game("xyz");
-        when(gameRepository.findGame("xyz")).thenReturn(Optional.of(game));
+        Game game = new Game(345L);
+        when(gameRepository.findGame(345L)).thenReturn(Optional.of(game));
 
-        mockMvc.perform(get("/hangout/game/xyz"))
+        mockMvc.perform(get("/hangout/game/345"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("gameId", is("xyz")))
         ;
@@ -51,7 +52,7 @@ public class CodeBreakerControllerTest {
 
     @Test
     public void cannotFindGame() throws Exception {
-        when(gameRepository.findGame("aaa")).thenReturn(Optional.empty());
+        when(gameRepository.findGame(any())).thenReturn(Optional.empty());
 
         mockMvc.perform(get("/hangout/game/aaa"))
                 .andExpect(status().isNotFound())

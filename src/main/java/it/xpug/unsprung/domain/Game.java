@@ -14,5 +14,5 @@ import javax.persistence.Id;
 public class Game {
     @Id
     @Getter
-    private String gameId;
+    private Long gameId;
 }

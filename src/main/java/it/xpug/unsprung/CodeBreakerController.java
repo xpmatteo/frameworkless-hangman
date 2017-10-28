@@ -30,7 +30,7 @@ public class CodeBreakerController {
 
     @RequestMapping(path = "/game/{gameId}", method = RequestMethod.GET)
     public ResponseEntity<Game> findGame(@PathVariable String gameId) {
-        Optional<Game> maybeGame = gameRepository.findGame(gameId);
+        Optional<Game> maybeGame = gameRepository.findGame(Long.parseLong(gameId, 16));
         if (maybeGame.isPresent())
             return new ResponseEntity<Game>(maybeGame.get(), HttpStatus.OK);
         return new ResponseEntity<Game>(HttpStatus.NOT_FOUND);

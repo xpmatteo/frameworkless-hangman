@@ -26,7 +26,10 @@ public class JdbcGameRepository implements GameRepository {
     }
 
     @Override
-    public Optional<Game> findGame(String gameId) {
-        return null;
+    public Optional<Game> findGame(Long gameId) {
+        Game found = hangoutTable.findOne(gameId);
+        if (null == found)
+            return Optional.empty();
+        return Optional.of(found);
     }
 }

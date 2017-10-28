@@ -1,4 +1,6 @@
 
-get game 404
-create game in db
-find game from db
+
+
+return ids in hex
+find game from db OK
+find game from db not found
