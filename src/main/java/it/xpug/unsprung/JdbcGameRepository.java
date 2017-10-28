@@ -10,15 +10,19 @@ import java.util.Optional;
 @Service
 public class JdbcGameRepository implements GameRepository {
     private GameIdGenerator gameIdGenerator;
+    private HangoutTable hangoutTable;
 
     @Autowired
-    public JdbcGameRepository(GameIdGenerator gameIdGenerator) {
+    public JdbcGameRepository(GameIdGenerator gameIdGenerator, HangoutTable hangoutTable) {
         this.gameIdGenerator = gameIdGenerator;
+        this.hangoutTable = hangoutTable;
     }
 
     @Override
     public Game createNewGame() {
-        return new Game(gameIdGenerator.generateGameId());
+        Game newGame = new Game(gameIdGenerator.generateGameId());
+        hangoutTable.save(newGame);
+        return newGame;
     }
 
     @Override
