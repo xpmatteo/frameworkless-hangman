@@ -1,6 +1,6 @@
-package it.xpug.unsprung;
+package it.xpug.unsprung.hangman;
 
-import it.xpug.unsprung.domain.Game;
+import it.xpug.unsprung.hangman.domain.Game;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,11 +14,11 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping(value = "/hangout", produces = MediaType.APPLICATION_JSON_VALUE)
-public class CodeBreakerController {
+public class HangmanController {
     private GameRepository gameRepository;
 
     @Autowired
-    public CodeBreakerController(GameRepository gameRepository) {
+    public HangmanController(GameRepository gameRepository) {
         this.gameRepository = gameRepository;
     }
 

@@ -1,5 +1,5 @@
 
-create table hangout_games (
+create table prisoners (
     game_id bigint PRIMARY KEY NOT NULL
 );
 

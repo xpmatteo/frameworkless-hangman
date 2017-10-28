@@ -1,4 +1,4 @@
-package it.xpug.unsprung.domain;
+package it.xpug.unsprung.hangman.domain;
 
 public interface GameIdGenerator {
     Long generateGameId();

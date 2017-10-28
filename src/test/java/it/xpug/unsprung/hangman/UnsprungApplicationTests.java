@@ -1,4 +1,4 @@
-package it.xpug.unsprung;
+package it.xpug.unsprung.hangman;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,7 +1,7 @@
-package it.xpug.unsprung;
+package it.xpug.unsprung.hangman;
 
-import it.xpug.unsprung.domain.Game;
-import it.xpug.unsprung.domain.GameIdGenerator;
+import it.xpug.unsprung.hangman.domain.Game;
+import it.xpug.unsprung.hangman.domain.GameIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,11 +1,9 @@
-package it.xpug.unsprung;
+package it.xpug.unsprung.hangman;
 
-import it.xpug.unsprung.domain.Game;
-import org.junit.Before;
+import it.xpug.unsprung.hangman.HangmanController;
+import it.xpug.unsprung.hangman.domain.Game;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -24,8 +22,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(CodeBreakerController.class)
-public class CodeBreakerControllerTest {
+@WebMvcTest(HangmanController.class)
+public class HangmanControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

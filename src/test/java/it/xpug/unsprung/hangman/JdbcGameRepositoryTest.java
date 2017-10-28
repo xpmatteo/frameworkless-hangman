@@ -1,10 +1,9 @@
-package it.xpug.unsprung;
+package it.xpug.unsprung.hangman;
 
-import it.xpug.unsprung.domain.Game;
-import it.xpug.unsprung.domain.GameIdGenerator;
-import org.junit.After;
+import it.xpug.unsprung.hangman.JdbcGameRepository;
+import it.xpug.unsprung.hangman.domain.Game;
+import it.xpug.unsprung.hangman.domain.GameIdGenerator;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +40,7 @@ public class JdbcGameRepositoryTest {
 
     @Before
     public void setUp() {
-        entityManager.createNativeQuery("delete from hangout_games").executeUpdate();
+        entityManager.createNativeQuery("delete from hangman_games").executeUpdate();
     }
 
     @Test
@@ -74,7 +73,7 @@ public class JdbcGameRepositoryTest {
     }
 
     private int gameCount() {
-        String sql = "select count(*) from hangout_games";
+        String sql = "select count(*) from hangman_games";
         BigInteger result = (BigInteger) entityManager.createNativeQuery(sql).getSingleResult();
         return Integer.valueOf(result.toString());
     }

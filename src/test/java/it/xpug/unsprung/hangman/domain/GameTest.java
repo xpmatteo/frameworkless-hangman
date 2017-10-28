@@ -1,8 +1,7 @@
-package it.xpug.unsprung.domain;
+package it.xpug.unsprung.hangman.domain;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

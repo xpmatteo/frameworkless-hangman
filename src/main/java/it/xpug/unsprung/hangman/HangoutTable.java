@@ -1,6 +1,6 @@
-package it.xpug.unsprung;
+package it.xpug.unsprung.hangman;
 
-import it.xpug.unsprung.domain.Game;
+import it.xpug.unsprung.hangman.domain.Game;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
