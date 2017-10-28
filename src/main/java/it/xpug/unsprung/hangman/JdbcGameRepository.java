@@ -2,6 +2,7 @@ package it.xpug.unsprung.hangman;
 
 import it.xpug.unsprung.hangman.domain.Game;
 import it.xpug.unsprung.hangman.domain.GameIdGenerator;
+import it.xpug.unsprung.hangman.domain.Prisoner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,7 @@ public class JdbcGameRepository implements GameRepository {
 
     @Override
     public Game createNewGame() {
-        Game newGame = new Game(gameIdGenerator.generateGameId());
+        Game newGame = new Game(gameIdGenerator.generateGameId(), new Prisoner());
         hangoutTable.save(newGame);
         return newGame;
     }

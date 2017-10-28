@@ -1,22 +1,33 @@
 package it.xpug.unsprung.hangman.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.ElementCollection;
+import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 import java.util.*;
 
-
+@Embeddable
 public class Prisoner {
 
-	private String id;
+    @Getter@Setter
 	private String word;
+
+    @Getter@Setter
 	private int guessesRemaining = 18;
+
+    @Transient
 	private Set<String> misses = new HashSet<String>();
+
+    @Transient
 	private Set<String> hits = new HashSet<String>();
 
-	public Prisoner(String id) {
-		this(id, new WordList().getRandomWord());
+	public Prisoner() {
+		this(new WordList().getRandomWord());
 	}
 
-	public Prisoner(String id, String word) {
-		this.id = id;
+	public Prisoner(String word) {
 		this.word = word;
 	}
 
@@ -27,7 +38,6 @@ public class Prisoner {
 		result.put("misses", misses);
 		result.put("hits", hits);
 		result.put("state", state());
-		result.put("id", id);
 		return result;
 	}
 
@@ -62,15 +72,6 @@ public class Prisoner {
 		} else {
 			misses.add(guess);
 		}
-	}
-
-	public String getId() {
-		return this.id;
-	}
-
-	@Override
-	public String toString() {
-		return "Prisoner " + id;
 	}
 
 	public int getGuessesRemaining() {

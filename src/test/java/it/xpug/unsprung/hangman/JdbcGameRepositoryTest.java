@@ -63,6 +63,7 @@ public class JdbcGameRepositoryTest {
 
         assertThat("not present", game.isPresent(), is(true));
         assertThat(game.get().getGameId(), is(789L));
+        assertThat(game.get().getPrisoner().getGuessesRemaining(), is(18));
     }
 
     @Test
@@ -74,8 +75,11 @@ public class JdbcGameRepositoryTest {
 
     private int gameCount() {
         String sql = "select count(*) from hangman_games";
-        BigInteger result = (BigInteger) entityManager.createNativeQuery(sql).getSingleResult();
-        return Integer.valueOf(result.toString());
+        return Integer.valueOf(((BigInteger) select(sql)).toString());
+    }
+
+    private Object select(String sql) {
+        return entityManager.createNativeQuery(sql).getSingleResult();
     }
 
 

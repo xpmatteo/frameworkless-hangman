@@ -9,14 +9,13 @@ import java.util.Set;
 import static org.junit.Assert.assertEquals;
 
 public class PrisonerTest {
-	Prisoner prisoner = new Prisoner("abc123", "someword");
+	Prisoner prisoner = new Prisoner("someword");
 
 	@Test
 	public void newPrisonerToJSON() {
 		assertEquals("********", get("word"));
 		assertEquals(18, get("guesses_remaining"));
 		assertEquals("help", get("state"));
-		assertEquals("abc123", get("id"));
 	}
 
 	@Test
