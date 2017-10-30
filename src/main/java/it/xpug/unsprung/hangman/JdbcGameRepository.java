@@ -22,6 +22,10 @@ public class JdbcGameRepository implements GameRepository {
     @Override
     public Game createNewGame() {
         Game newGame = new Game(gameIdGenerator.generateGameId(), new Prisoner());
+        return save(newGame);
+    }
+
+    public Game save(Game newGame) {
         hangoutTable.save(newGame);
         return newGame;
     }

@@ -3,7 +3,9 @@ package it.xpug.unsprung.hangman;
 import it.xpug.unsprung.hangman.JdbcGameRepository;
 import it.xpug.unsprung.hangman.domain.Game;
 import it.xpug.unsprung.hangman.domain.GameIdGenerator;
+import it.xpug.unsprung.hangman.domain.Prisoner;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +66,21 @@ public class JdbcGameRepositoryTest {
         assertThat("not present", game.isPresent(), is(true));
         assertThat(game.get().getGameId(), is(789L));
         assertThat(game.get().getPrisoner().getGuessesRemaining(), is(18));
+    }
+
+    @Test@Ignore
+    public void saveAndLoad() throws Exception {
+        Game original = new Game(42L, new Prisoner("foobar"));
+        original.getPrisoner().guess("x");
+        original.getPrisoner().guess("y");
+        original.getPrisoner().guess("f");
+        original.getPrisoner().guess("o");
+        jdbcGameRepository.save(original);
+
+        Optional<Game> game = jdbcGameRepository.findGame(42L);
+
+        assertThat("not present", game.isPresent(), is(true));
+        assertThat(game.get().getPrisoner(), is(original.getPrisoner()));
     }
 
     @Test

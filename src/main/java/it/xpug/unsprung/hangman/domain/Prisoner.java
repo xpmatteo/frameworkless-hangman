@@ -1,7 +1,9 @@
 package it.xpug.unsprung.hangman.domain;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
@@ -9,6 +11,8 @@ import javax.persistence.Transient;
 import java.util.*;
 
 @Embeddable
+@EqualsAndHashCode
+@ToString
 public class Prisoner {
 
     @Getter@Setter
