@@ -51,8 +51,9 @@ public class HangmanControllerTest {
         mockMvc.perform(get("/hangman/game/ff"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("gameId", is("ff")))
-                .andExpect(jsonPath("prisoner.guessesRemaining", is(18)))
+                .andExpect(jsonPath("prisoner.guesses_remaining", is(18)))
                 .andExpect(jsonPath("prisoner.hits", is(emptyList())))
+                .andExpect(jsonPath("prisoner.misses", is(emptyList())))
         ;
     }
 

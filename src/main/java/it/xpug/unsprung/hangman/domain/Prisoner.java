@@ -1,11 +1,17 @@
 package it.xpug.unsprung.hangman.domain;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import it.xpug.unsprung.hangman.util.SetConverter;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 
 import javax.persistence.Convert;
 import javax.persistence.Embeddable;
+import java.io.IOException;
 import java.util.*;
 
 import static java.util.Arrays.stream;
@@ -14,6 +20,7 @@ import static java.util.stream.Collectors.joining;
 @Embeddable
 @EqualsAndHashCode
 @ToString
+@JsonSerialize(using = Prisoner.JsonSerializer.class)
 public class Prisoner {
 
 	private String word;
@@ -80,4 +87,12 @@ public class Prisoner {
 	public int getGuessesRemaining() {
 		return guessesRemaining;
 	}
+
+    public static class JsonSerializer extends com.fasterxml.jackson.databind.JsonSerializer {
+        @Override
+        public void serialize(Object value, JsonGenerator gen, SerializerProvider serializers) throws IOException, JsonProcessingException {
+            Prisoner prisoner = (Prisoner) value;
+            gen.writeObject(prisoner.toMap());
+        }
+    }
 }
