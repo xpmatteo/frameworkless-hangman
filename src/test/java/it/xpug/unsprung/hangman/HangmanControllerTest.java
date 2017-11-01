@@ -93,7 +93,8 @@ public class HangmanControllerTest {
                 .param("guess", "xxxx")
         )
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("message", is(singleton("Guess 'xxxx' invalid: must be a single letter"))))
+                .andExpect(jsonPath("message", is("Guess 'xxxx' invalid: must be a single letter")))
+                .andExpect(jsonPath("status", is(400)))
         ;
     }
 
