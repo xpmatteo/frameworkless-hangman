@@ -1,22 +1,15 @@
 package it.xpug.unsprung.hangman.domain;
 
-import it.xpug.unsprung.util.SetConverter;
+import it.xpug.unsprung.hangman.util.SetConverter;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.Convert;
-import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
-import javax.persistence.Transient;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toSet;
 
 @Embeddable
 @EqualsAndHashCode

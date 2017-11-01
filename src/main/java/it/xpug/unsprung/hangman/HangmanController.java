@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.Optional;
 
 @Controller
-@RequestMapping(value = "/hangout", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/hangman", produces = MediaType.APPLICATION_JSON_VALUE)
 public class HangmanController {
     private GameRepository gameRepository;
 

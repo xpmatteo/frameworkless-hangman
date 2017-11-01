@@ -10,9 +10,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Collections;
 import java.util.Optional;
 
 import static java.lang.String.format;
+import static java.util.Collections.emptyList;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
@@ -35,7 +37,7 @@ public class HangmanControllerTest {
     public void createNewGame() throws Exception {
         when(gameRepository.createNewGame()).thenReturn(new Game(123L));
 
-        mockMvc.perform(post("/hangout/game"))
+        mockMvc.perform(post("/hangman/game"))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("gameId", is("7b")))
         ;
@@ -43,12 +45,14 @@ public class HangmanControllerTest {
 
     @Test
     public void findGame() throws Exception {
-        Game game = new Game(15L);
-        when(gameRepository.findGame(15L)).thenReturn(Optional.of(game));
+        Game game = new Game(255L);
+        when(gameRepository.findGame(255L)).thenReturn(Optional.of(game));
 
-        mockMvc.perform(get("/hangout/game/f"))
+        mockMvc.perform(get("/hangman/game/ff"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("gameId", is("f")))
+                .andExpect(jsonPath("gameId", is("ff")))
+                .andExpect(jsonPath("prisoner.guessesRemaining", is(18)))
+                .andExpect(jsonPath("prisoner.hits", is(emptyList())))
         ;
     }
 
@@ -56,7 +60,7 @@ public class HangmanControllerTest {
     public void cannotFindGame() throws Exception {
         when(gameRepository.findGame(any())).thenReturn(Optional.empty());
 
-        mockMvc.perform(get("/hangout/game/777"))
+        mockMvc.perform(get("/hangman/game/777"))
                 .andExpect(status().isNotFound())
         ;
     }

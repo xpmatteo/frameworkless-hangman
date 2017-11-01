@@ -1,4 +1,4 @@
-package it.xpug.unsprung.util;
+package it.xpug.unsprung.hangman.util;
 
 import javax.persistence.AttributeConverter;
 import java.util.Set;
