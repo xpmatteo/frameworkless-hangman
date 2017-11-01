@@ -2,6 +2,7 @@ package it.xpug.unsprung.hangman.util;
 
 import javax.persistence.AttributeConverter;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import static java.util.Arrays.stream;
@@ -18,7 +19,7 @@ public class SetConverter implements AttributeConverter<Set<String>, String> {
     @Override
     public Set<String> convertToEntityAttribute(String dbData) {
         if (dbData.isEmpty())
-            return emptySet();
-        return stream(dbData.split("")).collect(toSet());
+            return new HashSet<>();
+        return new HashSet<String>(stream(dbData.split("")).collect(toSet()));
     }
 }

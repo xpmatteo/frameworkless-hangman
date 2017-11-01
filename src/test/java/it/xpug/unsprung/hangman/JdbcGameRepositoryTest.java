@@ -89,7 +89,7 @@ public class JdbcGameRepositoryTest {
         assertThat("not present", game.isPresent(), is(true));
         assertThat(game.get().getPrisoner(), is(original.getPrisoner()));
     }
-    
+
     @Test
     public void gameNotFound() throws Exception {
         Optional<Game> game = jdbcGameRepository.findGame(9869L);

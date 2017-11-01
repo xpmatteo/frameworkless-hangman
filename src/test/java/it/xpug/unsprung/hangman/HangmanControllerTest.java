@@ -1,6 +1,7 @@
 package it.xpug.unsprung.hangman;
 
 import it.xpug.unsprung.hangman.domain.Game;
+import it.xpug.unsprung.hangman.domain.Prisoner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Optional;
 
 import static java.util.Collections.emptyList;
+import static java.util.Collections.singleton;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -60,6 +63,37 @@ public class HangmanControllerTest {
 
         mockMvc.perform(get("/hangman/game/777"))
                 .andExpect(status().isNotFound())
+        ;
+    }
+
+    @Test
+    public void guess() throws Exception {
+        Game game = new Game(255L, new Prisoner("pippo"));
+        when(gameRepository.findGame(255L)).thenReturn(Optional.of(game));
+
+        mockMvc.perform(post("/hangman/game/ff/guesses").param("guess", "x")
+        )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("gameId", is("ff")))
+                .andExpect(jsonPath("prisoner.guesses_remaining", is(17)))
+                .andExpect(jsonPath("prisoner.hits", is(emptyList())))
+                .andExpect(jsonPath("prisoner.misses", is(singleton("x"))))
+        ;
+
+        // we have no way to test that the game was saved!!!
+    }
+
+    @Test
+    public void guessTooLongWord() throws Exception {
+        Game game = new Game(255L, new Prisoner("pippo"));
+        when(gameRepository.findGame(255L)).thenReturn(Optional.of(game));
+
+        mockMvc.perform(
+                post("/hangman/game/ff/guesses")
+                .param("guess", "xxxx")
+        )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("message", is(singleton("Guess 'xxxx' invalid: must be a single letter"))))
         ;
     }
 
