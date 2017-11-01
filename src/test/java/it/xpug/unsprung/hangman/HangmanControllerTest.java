@@ -1,6 +1,5 @@
 package it.xpug.unsprung.hangman;
 
-import it.xpug.unsprung.hangman.HangmanController;
 import it.xpug.unsprung.hangman.domain.Game;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,10 +9,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Collections;
 import java.util.Optional;
 
-import static java.lang.String.format;
 import static java.util.Collections.emptyList;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
