@@ -6,7 +6,9 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 public class PrisonerTest {
 	Prisoner prisoner = new Prisoner("someword");
@@ -74,7 +76,7 @@ public class PrisonerTest {
 		assertEquals(0, get("guesses_remaining"));
 	}
 
-	private Set<String> set(String ... strings) {
+    private Set<String> set(String ... strings) {
 		Set<String> result = new HashSet<String>();
 		for (String string : strings) {
 			result.add(string);

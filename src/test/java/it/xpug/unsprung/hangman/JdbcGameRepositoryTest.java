@@ -68,7 +68,7 @@ public class JdbcGameRepositoryTest {
         assertThat(game.get().getPrisoner().getGuessesRemaining(), is(18));
     }
 
-    @Test@Ignore
+    @Test
     public void saveAndLoad() throws Exception {
         Game original = new Game(42L, new Prisoner("foobar"));
         original.getPrisoner().guess("x");
