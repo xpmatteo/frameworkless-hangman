@@ -1,3 +1,6 @@
+Prerequisites
+
+  Java 8, gradle, mysql or mariadb
 
 Run with
 
