@@ -1,6 +1,6 @@
-package it.xpug.unsprung.hangman;
+package it.xpug.frameworkless.hangman;
 
-import it.xpug.unsprung.hangman.domain.Game;
+import it.xpug.frameworkless.hangman.domain.Game;
 
 import java.util.Optional;
 

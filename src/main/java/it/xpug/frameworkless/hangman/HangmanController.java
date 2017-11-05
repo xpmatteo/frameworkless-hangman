@@ -1,6 +1,6 @@
-package it.xpug.unsprung.hangman;
+package it.xpug.frameworkless.hangman;
 
-import it.xpug.unsprung.hangman.domain.Game;
+import it.xpug.frameworkless.hangman.domain.Game;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # define key information
-dbname=unsprung
-dbuser=unsprung
-dbpassword=unsprung
+dbname=hangman
+dbuser=hangman
+dbpassword=hangman
 
 # no customization needed beyond this line
 set -e

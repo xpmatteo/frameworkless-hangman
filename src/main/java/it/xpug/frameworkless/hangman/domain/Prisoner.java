@@ -1,12 +1,11 @@
-package it.xpug.unsprung.hangman.domain;
+package it.xpug.frameworkless.hangman.domain;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import it.xpug.unsprung.hangman.util.SetConverter;
+import it.xpug.frameworkless.hangman.util.SetConverter;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.ToString;
 
 import javax.persistence.Convert;

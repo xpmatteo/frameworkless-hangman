@@ -1,4 +1,4 @@
-package it.xpug.unsprung.hangman.util;
+package it.xpug.frameworkless.hangman.util;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

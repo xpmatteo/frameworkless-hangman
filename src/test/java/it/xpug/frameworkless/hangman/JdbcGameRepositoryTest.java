@@ -1,13 +1,9 @@
-package it.xpug.unsprung.hangman;
+package it.xpug.frameworkless.hangman;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.JsonPath;
-import it.xpug.unsprung.hangman.JdbcGameRepository;
-import it.xpug.unsprung.hangman.domain.Game;
-import it.xpug.unsprung.hangman.domain.GameIdGenerator;
-import it.xpug.unsprung.hangman.domain.Prisoner;
+import it.xpug.frameworkless.hangman.domain.Game;
+import it.xpug.frameworkless.hangman.domain.GameIdGenerator;
+import it.xpug.frameworkless.hangman.domain.Prisoner;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
-import java.io.DataOutput;
-import java.io.IOException;
-import java.io.StringWriter;
 import java.math.BigInteger;
-import java.util.Collections;
 import java.util.Optional;
 
-import static java.util.Collections.emptyList;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;

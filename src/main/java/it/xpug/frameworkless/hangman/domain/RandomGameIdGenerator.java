@@ -1,4 +1,4 @@
-package it.xpug.unsprung.hangman.domain;
+package it.xpug.frameworkless.hangman.domain;
 
 import org.springframework.stereotype.Component;
 

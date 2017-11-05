@@ -1,4 +1,4 @@
-package it.xpug.unsprung.hangman.util;
+package it.xpug.frameworkless.hangman.util;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JavaType;

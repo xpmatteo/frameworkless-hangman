@@ -1,15 +1,14 @@
-package it.xpug.unsprung.hangman.domain;
+package it.xpug.frameworkless.hangman.domain;
 
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import it.xpug.unsprung.hangman.util.ToHexSerializer;
+import it.xpug.frameworkless.hangman.util.ToHexSerializer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Transient;
 
 @Entity(name = "hangman_games")
 @NoArgsConstructor

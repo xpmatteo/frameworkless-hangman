@@ -1,4 +1,4 @@
-package it.xpug.unsprung.hangman.util;
+package it.xpug.frameworkless.hangman.util;
 
 import javax.persistence.AttributeConverter;
 import java.util.Collections;

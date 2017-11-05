@@ -1,4 +1,4 @@
-package it.xpug.unsprung.hangman;
+package it.xpug.frameworkless.hangman;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
