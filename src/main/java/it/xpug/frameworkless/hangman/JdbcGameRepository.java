@@ -19,18 +19,17 @@ import java.util.Optional;
 import java.util.Set;
 
 import static java.util.Arrays.stream;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toSet;
 
 @Service
 public class JdbcGameRepository implements GameRepository {
     private GameIdGenerator gameIdGenerator;
-    private HangoutTable hangoutTable;
     private DataSource dataSource;
 
     @Autowired
-    public JdbcGameRepository(GameIdGenerator gameIdGenerator, HangoutTable hangoutTable, DataSource dataSource) {
+    public JdbcGameRepository(GameIdGenerator gameIdGenerator, DataSource dataSource) {
         this.gameIdGenerator = gameIdGenerator;
-        this.hangoutTable = hangoutTable;
         this.dataSource = dataSource;
     }
 
@@ -40,9 +39,32 @@ public class JdbcGameRepository implements GameRepository {
         return save(newGame);
     }
 
-    public Game save(Game newGame) {
-        hangoutTable.save(newGame);
-        return newGame;
+    @SneakyThrows
+    public Game save(Game game) {
+        String sql = "insert into hangman_games " +
+                "(game_id, word, guesses_remaining, hits, misses) " +
+                "values" +
+                "(?, ?, ?, ?, ?)";
+        try (Connection connection = dataSource.getConnection()) {
+            Prisoner prisoner = game.getPrisoner();
+            new QueryRunner().execute(
+                    connection,
+                    sql,
+                    game.getGameId(),
+                    get(prisoner, "word"),
+                    get(prisoner, "guessesRemaining"),
+                    convertCharSetToString((Set<String>) get(prisoner, "hits")),
+                    convertCharSetToString((Set<String>) get(prisoner, "misses"))
+            );
+        }
+        return game;
+    }
+
+    @SneakyThrows
+    private Object get(Object object, String fieldName) {
+        Field field = object.getClass().getDeclaredField(fieldName);
+        field.setAccessible(true);
+        return field.get(object);
     }
 
     @Override
@@ -64,7 +86,6 @@ public class JdbcGameRepository implements GameRepository {
                 }
             };
             return new QueryRunner().query(connection, "select * from hangman_games where game_id = ?", handler, gameId);
-
         }
     }
 
@@ -75,10 +96,14 @@ public class JdbcGameRepository implements GameRepository {
         field.set(target, value);
     }
 
-    public Set<String> convertStringToCharSet(String dbData) {
+    private Set<String> convertStringToCharSet(String dbData) {
         if (dbData.isEmpty())
             return new HashSet<>();
-        return new HashSet<String>(stream(dbData.split("")).collect(toSet()));
+        return new HashSet<>(stream(dbData.split("")).collect(toSet()));
+    }
+
+    private String convertCharSetToString(Set<String> set) {
+        return set.stream().sorted().collect(joining());
     }
 
 }

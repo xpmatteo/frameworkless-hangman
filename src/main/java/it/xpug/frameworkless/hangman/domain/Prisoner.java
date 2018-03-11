@@ -11,10 +11,10 @@ import lombok.ToString;
 import javax.persistence.Convert;
 import javax.persistence.Embeddable;
 import java.io.IOException;
-import java.util.*;
-
-import static java.util.Arrays.stream;
-import static java.util.stream.Collectors.joining;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 @Embeddable
 @EqualsAndHashCode

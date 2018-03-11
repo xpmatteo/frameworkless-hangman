@@ -13,34 +13,24 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import javax.sql.DataSource;
-
-import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@TestPropertySource("classpath:application-test.properties")
 public class JdbcGameRepositoryTest {
 
-    @Autowired
-    DataSource dataSource;
+    DataSource dataSource = new TestDataSource();
 
-    @MockBean
-    GameIdGenerator gameIdGenerator;
+    GameIdGenerator gameIdGenerator = mock(GameIdGenerator.class);
 
-    @Autowired
-    JdbcGameRepository jdbcGameRepository;
+    JdbcGameRepository jdbcGameRepository = new JdbcGameRepository(gameIdGenerator, dataSource);
 
     Connection connection;
 
