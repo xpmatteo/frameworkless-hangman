@@ -36,11 +36,11 @@ public class JdbcGameRepository implements GameRepository {
     @Override
     public Game createNewGame() {
         Game newGame = new Game(gameIdGenerator.generateGameId(), new Prisoner());
-        return save(newGame);
+        return create(newGame);
     }
 
     @SneakyThrows
-    public Game save(Game game) {
+    public Game create(Game game) {
         String sql = "insert into hangman_games " +
                 "(game_id, word, guesses_remaining, hits, misses) " +
                 "values" +
@@ -60,11 +60,24 @@ public class JdbcGameRepository implements GameRepository {
         return game;
     }
 
+    @Override
     @SneakyThrows
-    private Object get(Object object, String fieldName) {
-        Field field = object.getClass().getDeclaredField(fieldName);
-        field.setAccessible(true);
-        return field.get(object);
+    public void update(Game game) {
+        String sql = "update hangman_games set " +
+                "word = ?, guesses_remaining = ?, hits = ?, misses = ? " +
+                "where game_id = ? ";
+        try (Connection connection = dataSource.getConnection()) {
+            Prisoner prisoner = game.getPrisoner();
+            new QueryRunner().execute(
+                    connection,
+                    sql,
+                    get(prisoner, "word"),
+                    get(prisoner, "guessesRemaining"),
+                    convertCharSetToString((Set<String>) get(prisoner, "hits")),
+                    convertCharSetToString((Set<String>) get(prisoner, "misses")),
+                    game.getGameId()
+            );
+        }
     }
 
     @Override
@@ -96,6 +109,13 @@ public class JdbcGameRepository implements GameRepository {
         field.set(target, value);
     }
 
+    @SneakyThrows
+    private Object get(Object object, String fieldName) {
+        Field field = object.getClass().getDeclaredField(fieldName);
+        field.setAccessible(true);
+        return field.get(object);
+    }
+
     private Set<String> convertStringToCharSet(String dbData) {
         if (dbData.isEmpty())
             return new HashSet<>();
@@ -105,5 +125,4 @@ public class JdbcGameRepository implements GameRepository {
     private String convertCharSetToString(Set<String> set) {
         return set.stream().sorted().collect(joining());
     }
-
 }

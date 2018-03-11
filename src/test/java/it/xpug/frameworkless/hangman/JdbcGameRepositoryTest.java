@@ -7,12 +7,6 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -69,7 +63,7 @@ public class JdbcGameRepositoryTest {
         original.getPrisoner().guess("y");
         original.getPrisoner().guess("f");
         original.getPrisoner().guess("o");
-        jdbcGameRepository.save(original);
+        jdbcGameRepository.create(original);
 
         Optional<Game> game = jdbcGameRepository.findGame(42L);
 
@@ -80,14 +74,14 @@ public class JdbcGameRepositoryTest {
     @Test
     public void updateGame() throws Exception {
         Game original = new Game(42L, new Prisoner("foobar"));
-        jdbcGameRepository.save(original);
+        jdbcGameRepository.create(original);
         Game updated = jdbcGameRepository.findGame(42L).get();
         updated.getPrisoner().guess("x");
-        jdbcGameRepository.save(updated);
+        jdbcGameRepository.update(updated);
 
         Game found = jdbcGameRepository.findGame(42L).get();
 
-        assertThat(found.getPrisoner().toString(), is(updated.getPrisoner()));
+        assertThat(found.getPrisoner(), is(updated.getPrisoner()));
     }
 
     @Test

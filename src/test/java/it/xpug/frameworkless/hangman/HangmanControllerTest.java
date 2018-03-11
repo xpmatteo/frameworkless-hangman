@@ -80,8 +80,7 @@ public class HangmanControllerTest {
                 .andExpect(jsonPath("prisoner.misses", is(singletonList("x"))))
         ;
 
-        // we have no good way to test that the game was saved!!!
-        // in fact it is saved because the controller is annotated as "transactional"
+        verify(gameRepository).update(game);
     }
 
     @Test

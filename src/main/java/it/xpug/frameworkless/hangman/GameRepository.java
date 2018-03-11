@@ -7,5 +7,7 @@ import java.util.Optional;
 public interface GameRepository {
     Game createNewGame();
 
+    void update(Game game);
+
     Optional<Game> findGame(Long gameId);
 }

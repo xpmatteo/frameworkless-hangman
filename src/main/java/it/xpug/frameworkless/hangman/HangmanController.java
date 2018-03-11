@@ -45,6 +45,7 @@ public class HangmanController {
             throw new GameNotFoundException(gameId);
         Game game = maybeGame.get();
         game.getPrisoner().guess(guess);
+        gameRepository.update(game);
         return new ResponseEntity<Game>(game, HttpStatus.OK);
     }
 
