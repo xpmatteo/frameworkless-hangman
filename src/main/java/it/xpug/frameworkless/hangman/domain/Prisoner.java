@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import it.xpug.frameworkless.hangman.util.SetConverter;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -16,7 +15,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-@Embeddable
 @EqualsAndHashCode
 @ToString
 @JsonSerialize(using = Prisoner.JsonSerializer.class)
@@ -26,10 +24,8 @@ public class Prisoner {
 
 	private int guessesRemaining = 18;
 
-    @Convert(converter = SetConverter.class)
 	private Set<String> misses = new HashSet<String>();
 
-    @Convert(converter = SetConverter.class)
 	private Set<String> hits = new HashSet<String>();
 
 	public Prisoner() {

@@ -10,7 +10,6 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-@Entity(name = "hangman_games")
 @NoArgsConstructor
 public class Game {
     @Id
