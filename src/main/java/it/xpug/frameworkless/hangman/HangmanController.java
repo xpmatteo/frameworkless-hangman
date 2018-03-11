@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @Controller
-@RequestMapping(value = "/hangman", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 public class HangmanController {
     private GameRepository gameRepository;
 
@@ -21,13 +21,13 @@ public class HangmanController {
         this.gameRepository = gameRepository;
     }
 
-    @RequestMapping(path = "/game", method = RequestMethod.POST)
+    @RequestMapping(path = "/hangman/game", method = RequestMethod.POST)
     public ResponseEntity<Game> createNewGame() {
         Game newGame = gameRepository.createNewGame();
         return new ResponseEntity<Game>(newGame, HttpStatus.CREATED);
     }
 
-    @RequestMapping(path = "/game/{gameId}", method = RequestMethod.GET)
+    @RequestMapping(path = "/hangman/game/{gameId}", method = RequestMethod.GET)
     public ResponseEntity<Game> findGame(@PathVariable String gameId) {
         Optional<Game> maybeGame = gameRepository.findGame(Long.parseLong(gameId, 16));
         if (!maybeGame.isPresent())
@@ -35,7 +35,7 @@ public class HangmanController {
         return new ResponseEntity<Game>(maybeGame.get(), HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/game/{gameId}/guesses", method = RequestMethod.POST)
+    @RequestMapping(path = "/hangman/game/{gameId}/guesses", method = RequestMethod.POST)
     public ResponseEntity<Game> guess(@PathVariable String gameId, @RequestParam String guess) {
         if (guess.length() > 1)
             throw new InvalidGuessException(guess);
