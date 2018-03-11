@@ -78,6 +78,19 @@ public class JdbcGameRepositoryTest {
     }
 
     @Test
+    public void updateGame() throws Exception {
+        Game original = new Game(42L, new Prisoner("foobar"));
+        jdbcGameRepository.save(original);
+        Game updated = jdbcGameRepository.findGame(42L).get();
+        updated.getPrisoner().guess("x");
+        jdbcGameRepository.save(updated);
+
+        Game found = jdbcGameRepository.findGame(42L).get();
+
+        assertThat(found.getPrisoner().toString(), is(updated.getPrisoner()));
+    }
+
+    @Test
     public void gameNotFound() throws Exception {
         Optional<Game> game = jdbcGameRepository.findGame(9869L);
 
