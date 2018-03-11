@@ -71,8 +71,7 @@ public class HangmanControllerTest {
         Game game = new Game(255L, new Prisoner("pippo"));
         when(gameRepository.findGame(255L)).thenReturn(Optional.of(game));
 
-        mockMvc.perform(post("/hangman/game/ff/guesses").param("guess", "x")
-        )
+        mockMvc.perform(post("/hangman/game/ff/guesses").param("guess", "x"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("gameId", is("ff")))
                 .andExpect(jsonPath("prisoner.guesses_remaining", is(17)))

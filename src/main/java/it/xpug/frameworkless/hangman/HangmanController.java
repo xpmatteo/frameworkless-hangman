@@ -13,7 +13,6 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping(value = "/hangman", produces = MediaType.APPLICATION_JSON_VALUE)
-@Transactional
 public class HangmanController {
     private GameRepository gameRepository;
 

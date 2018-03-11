@@ -9,7 +9,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @TestPropertySource("classpath:application-test.properties")
-public class UnsprungApplicationTests {
+public class HangmanApplicationTests {
 
 	@Test
 	public void contextLoads() {
