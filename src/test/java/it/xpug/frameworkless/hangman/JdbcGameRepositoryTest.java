@@ -3,6 +3,8 @@ package it.xpug.frameworkless.hangman;
 import it.xpug.frameworkless.hangman.domain.Game;
 import it.xpug.frameworkless.hangman.domain.GameIdGenerator;
 import it.xpug.frameworkless.hangman.domain.Prisoner;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,8 +16,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.sql.DataSource;
 
 import java.math.BigInteger;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
@@ -25,12 +30,11 @@ import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@Transactional
 @TestPropertySource("classpath:application-test.properties")
 public class JdbcGameRepositoryTest {
 
     @Autowired
-    EntityManager entityManager;
+    DataSource dataSource;
 
     @MockBean
     GameIdGenerator gameIdGenerator;
@@ -38,9 +42,12 @@ public class JdbcGameRepositoryTest {
     @Autowired
     JdbcGameRepository jdbcGameRepository;
 
+    Connection connection;
+
     @Before
-    public void setUp() {
-        entityManager.createNativeQuery("delete from hangman_games").executeUpdate();
+    public void setUp() throws SQLException {
+        connection = dataSource.getConnection();
+        connection.createStatement().execute("delete from hangman_games");
     }
 
     @Test
@@ -63,7 +70,6 @@ public class JdbcGameRepositoryTest {
 
         assertThat("not present", game.isPresent(), is(true));
         assertThat(game.get().getGameId(), is(789L));
-        assertThat(game.get().getPrisoner().getGuessesRemaining(), is(18));
     }
 
     @Test
@@ -88,13 +94,13 @@ public class JdbcGameRepositoryTest {
         assertThat("not present", game.isPresent(), is(false));
     }
 
-    private int gameCount() {
+    private int gameCount() throws SQLException {
         String sql = "select count(*) from hangman_games";
-        return Integer.valueOf(((BigInteger) select(sql)).toString());
+        return (int) (long) select(sql);
     }
 
-    private Object select(String sql) {
-        return entityManager.createNativeQuery(sql).getSingleResult();
+    private Object select(String sql) throws SQLException {
+        return new QueryRunner().query(connection, sql, new ScalarHandler<>());
     }
 
 
