@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -49,14 +48,14 @@ public class HangmanController {
     }
 
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
-    private class InvalidGuessException extends RuntimeException {
+    public static class InvalidGuessException extends RuntimeException {
         public InvalidGuessException(String guess) {
             super(String.format("Guess '%s' invalid: must be a single letter", guess));
         }
     }
 
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
-    private class GameNotFoundException extends RuntimeException {
+    public static class GameNotFoundException extends RuntimeException {
         public GameNotFoundException(String gameId) {
             super(String.format("Game with id '%s' not found", gameId));
         }
