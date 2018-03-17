@@ -5,17 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
-@RestController
+@Controller
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-public class HangmanController implements Controller {
+public class HangmanController {
     private GameRepository gameRepository;
 
     @Autowired
@@ -48,11 +45,6 @@ public class HangmanController implements Controller {
         game.getPrisoner().guess(guess);
         gameRepository.update(game);
         return new ResponseEntity<Game>(game, HttpStatus.OK);
-    }
-
-    @Override
-    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        return null;
     }
 
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
