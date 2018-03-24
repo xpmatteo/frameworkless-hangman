@@ -22,7 +22,7 @@ public class Game {
         return "Game " + gameId;
     }
 
-    @Getter@Setter
+    @Getter
     private Prisoner prisoner;
 
     public Game(Long gameId) {

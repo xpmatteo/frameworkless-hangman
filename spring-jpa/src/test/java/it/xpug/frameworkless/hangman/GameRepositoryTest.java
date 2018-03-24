@@ -1,9 +1,9 @@
 package it.xpug.frameworkless.hangman;
 
+import it.xpug.frameworkless.hangman.db.GameRepository;
 import it.xpug.frameworkless.hangman.domain.Game;
 import it.xpug.frameworkless.hangman.domain.GameIdGenerator;
 import it.xpug.frameworkless.hangman.domain.Prisoner;
-import it.xpug.frameworkless.hangman.db.GameRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,13 +15,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-
 import java.math.BigInteger;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)

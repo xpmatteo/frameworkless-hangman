@@ -6,10 +6,6 @@ import it.xpug.frameworkless.hangman.domain.Game;
 import it.xpug.frameworkless.hangman.domain.Prisoner;
 import org.junit.Test;
 
-import java.util.Collections;
-import java.util.Set;
-
-import static java.util.Collections.emptySet;
 import static java.util.Collections.singleton;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;

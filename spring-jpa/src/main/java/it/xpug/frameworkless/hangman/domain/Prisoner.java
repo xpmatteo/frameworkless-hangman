@@ -1,21 +1,15 @@
 package it.xpug.frameworkless.hangman.domain;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import it.xpug.frameworkless.hangman.util.SetConverter;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.Convert;
 import javax.persistence.Embeddable;
-import java.io.IOException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
-import static java.util.Arrays.stream;
 import static java.util.Collections.unmodifiableSet;
-import static java.util.stream.Collectors.joining;
 
 @Embeddable
 @EqualsAndHashCode
@@ -69,6 +63,10 @@ public class Prisoner {
 		return result;
 	}
 
+	public int getGuessesRemaining() {
+		return guessesRemaining;
+	}
+
 	public void guess(String guess) {
 		if (guessesRemaining == 0) {
 			return;
@@ -79,10 +77,6 @@ public class Prisoner {
 		} else {
 			misses.add(guess);
 		}
-	}
-
-	public int getGuessesRemaining() {
-		return guessesRemaining;
 	}
 
 }
