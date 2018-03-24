@@ -1,4 +1,4 @@
-package it.xpug.frameworkless.hangman;
+package it.xpug.frameworkless.hangman.db;
 
 import it.xpug.frameworkless.hangman.domain.Game;
 import it.xpug.frameworkless.hangman.domain.GameIdGenerator;
@@ -9,17 +9,16 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class JdbcGameRepository implements GameRepository {
+public class GameRepository {
     private GameIdGenerator gameIdGenerator;
     private HangoutTable hangoutTable;
 
     @Autowired
-    public JdbcGameRepository(GameIdGenerator gameIdGenerator, HangoutTable hangoutTable) {
+    public GameRepository(GameIdGenerator gameIdGenerator, HangoutTable hangoutTable) {
         this.gameIdGenerator = gameIdGenerator;
         this.hangoutTable = hangoutTable;
     }
 
-    @Override
     public Game createNewGame() {
         Game newGame = new Game(gameIdGenerator.generateGameId(), new Prisoner());
         return save(newGame);
@@ -30,7 +29,6 @@ public class JdbcGameRepository implements GameRepository {
         return newGame;
     }
 
-    @Override
     public Optional<Game> findGame(Long gameId) {
         Game found = hangoutTable.findOne(gameId);
         if (null == found)

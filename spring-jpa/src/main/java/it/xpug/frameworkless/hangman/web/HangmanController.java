@@ -1,18 +1,17 @@
-package it.xpug.frameworkless.hangman;
+package it.xpug.frameworkless.hangman.web;
 
+import it.xpug.frameworkless.hangman.db.GameRepository;
 import it.xpug.frameworkless.hangman.domain.Game;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-@Controller
-@RequestMapping(value = "/hangman", produces = MediaType.APPLICATION_JSON_VALUE)
+@RestController
+@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 @Transactional
 public class HangmanController {
     private GameRepository gameRepository;
@@ -22,22 +21,23 @@ public class HangmanController {
         this.gameRepository = gameRepository;
     }
 
-    @RequestMapping(path = "/game", method = RequestMethod.POST)
-    public ResponseEntity<Game> createNewGame() {
+    @RequestMapping(path = "/hangman/game", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.CREATED)
+    public GameResponse createNewGame() {
         Game newGame = gameRepository.createNewGame();
-        return new ResponseEntity<Game>(newGame, HttpStatus.CREATED);
+        return GameResponse.from(newGame);
     }
 
-    @RequestMapping(path = "/game/{gameId}", method = RequestMethod.GET)
-    public ResponseEntity<Game> findGame(@PathVariable String gameId) {
+    @RequestMapping(path = "/hangman/game/{gameId}", method = RequestMethod.GET)
+    public GameResponse findGame(@PathVariable String gameId) {
         Optional<Game> maybeGame = gameRepository.findGame(Long.parseLong(gameId, 16));
         if (!maybeGame.isPresent())
             throw  new GameNotFoundException(gameId);
-        return new ResponseEntity<Game>(maybeGame.get(), HttpStatus.OK);
+        return GameResponse.from(maybeGame.get());
     }
 
-    @RequestMapping(path = "/game/{gameId}/guesses", method = RequestMethod.POST)
-    public ResponseEntity<Game> guess(@PathVariable String gameId, @RequestParam String guess) {
+    @RequestMapping(path = "/hangman/game/{gameId}/guesses", method = RequestMethod.POST)
+    public GameResponse guess(@PathVariable String gameId, @RequestParam String guess) {
         if (guess.length() > 1)
             throw new InvalidGuessException(guess);
         Optional<Game> maybeGame = gameRepository.findGame(Long.parseLong(gameId, 16));
@@ -45,7 +45,7 @@ public class HangmanController {
             throw new GameNotFoundException(gameId);
         Game game = maybeGame.get();
         game.getPrisoner().guess(guess);
-        return new ResponseEntity<Game>(game, HttpStatus.OK);
+        return GameResponse.from(game);
     }
 
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)

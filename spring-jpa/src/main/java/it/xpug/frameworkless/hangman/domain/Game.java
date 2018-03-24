@@ -15,7 +15,6 @@ import javax.persistence.Id;
 public class Game {
     @Id
     @Getter
-    @JsonSerialize(using=ToHexSerializer.class)
     private Long gameId;
 
     @Override

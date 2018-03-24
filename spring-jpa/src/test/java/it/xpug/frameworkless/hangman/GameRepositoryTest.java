@@ -3,6 +3,7 @@ package it.xpug.frameworkless.hangman;
 import it.xpug.frameworkless.hangman.domain.Game;
 import it.xpug.frameworkless.hangman.domain.GameIdGenerator;
 import it.xpug.frameworkless.hangman.domain.Prisoner;
+import it.xpug.frameworkless.hangman.db.GameRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,7 +28,7 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 @Transactional
 @TestPropertySource("classpath:application-test.properties")
-public class JdbcGameRepositoryTest {
+public class GameRepositoryTest {
 
     @Autowired
     EntityManager entityManager;
@@ -36,7 +37,7 @@ public class JdbcGameRepositoryTest {
     GameIdGenerator gameIdGenerator;
 
     @Autowired
-    JdbcGameRepository jdbcGameRepository;
+    GameRepository gameRepository;
 
     @Before
     public void setUp() {
@@ -48,7 +49,7 @@ public class JdbcGameRepositoryTest {
         when(gameIdGenerator.generateGameId()).thenReturn(123L);
         assertThat(gameCount(), is(0));
 
-        Game game = jdbcGameRepository.createNewGame();
+        Game game = gameRepository.createNewGame();
 
         assertThat(game.getGameId(), is(123L));
         assertThat(gameCount(), is(1));
@@ -57,9 +58,9 @@ public class JdbcGameRepositoryTest {
     @Test
     public void findGame() throws Exception {
         when(gameIdGenerator.generateGameId()).thenReturn(789L);
-        jdbcGameRepository.createNewGame();
+        gameRepository.createNewGame();
 
-        Optional<Game> game = jdbcGameRepository.findGame(789L);
+        Optional<Game> game = gameRepository.findGame(789L);
 
         assertThat("not present", game.isPresent(), is(true));
         assertThat(game.get().getGameId(), is(789L));
@@ -73,9 +74,9 @@ public class JdbcGameRepositoryTest {
         original.getPrisoner().guess("y");
         original.getPrisoner().guess("f");
         original.getPrisoner().guess("o");
-        jdbcGameRepository.save(original);
+        gameRepository.save(original);
 
-        Optional<Game> game = jdbcGameRepository.findGame(42L);
+        Optional<Game> game = gameRepository.findGame(42L);
 
         assertThat("not present", game.isPresent(), is(true));
         assertThat(game.get().getPrisoner(), is(original.getPrisoner()));
@@ -83,7 +84,7 @@ public class JdbcGameRepositoryTest {
 
     @Test
     public void gameNotFound() throws Exception {
-        Optional<Game> game = jdbcGameRepository.findGame(9869L);
+        Optional<Game> game = gameRepository.findGame(9869L);
 
         assertThat("not present", game.isPresent(), is(false));
     }

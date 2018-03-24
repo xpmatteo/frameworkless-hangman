@@ -2,11 +2,14 @@ package it.xpug.frameworkless.hangman;
 
 import it.xpug.frameworkless.hangman.domain.Game;
 import it.xpug.frameworkless.hangman.domain.Prisoner;
+import it.xpug.frameworkless.hangman.db.GameRepository;
+import it.xpug.frameworkless.hangman.web.HangmanController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -35,9 +38,9 @@ public class HangmanControllerTest {
 
     @Test
     public void createNewGame() throws Exception {
-        when(gameRepository.createNewGame()).thenReturn(new Game(123L));
+        when(gameRepository.createNewGame()).thenReturn(new Game((long) 0x7b));
 
-        mockMvc.perform(post("/hangman/game"))
+        mockMvc.perform(post("/hangman/game").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("gameId", is("7b")))
         ;
@@ -71,8 +74,7 @@ public class HangmanControllerTest {
         Game game = new Game(255L, new Prisoner("pippo"));
         when(gameRepository.findGame(255L)).thenReturn(Optional.of(game));
 
-        mockMvc.perform(post("/hangman/game/ff/guesses").param("guess", "x")
-        )
+        mockMvc.perform(post("/hangman/game/ff/guesses").param("guess", "x"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("gameId", is("ff")))
                 .andExpect(jsonPath("prisoner.guesses_remaining", is(17)))
