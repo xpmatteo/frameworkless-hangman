@@ -14,12 +14,12 @@ import java.io.IOException;
 import java.util.*;
 
 import static java.util.Arrays.stream;
+import static java.util.Collections.unmodifiableSet;
 import static java.util.stream.Collectors.joining;
 
 @Embeddable
 @EqualsAndHashCode
 @ToString
-@JsonSerialize(using = Prisoner.JsonSerializer.class)
 public class Prisoner {
 
 	private String word;
@@ -40,17 +40,15 @@ public class Prisoner {
 		this.word = word;
 	}
 
-	public Map<String, Object> toMap() {
-		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("word", getMaskedWord());
-		result.put("guesses_remaining", guessesRemaining);
-		result.put("misses", misses);
-		result.put("hits", hits);
-		result.put("state", state());
-		return result;
+	public Set<String> getMisses() {
+		return unmodifiableSet(misses);
 	}
 
-	private String state() {
+	public Set<String> getHits() {
+		return unmodifiableSet(hits);
+	}
+
+	public String getState() {
 		if (word.equals(getMaskedWord() ))
 			return "rescued";
 		if (guessesRemaining > 0)
@@ -58,7 +56,7 @@ public class Prisoner {
 		return "lost";
 	}
 
-	private String getMaskedWord() {
+	public String getMaskedWord() {
 		String result = "";
 		for (int i=0; i<word.length(); i++) {
 			String c = word.substring(i, i+1);
@@ -87,11 +85,4 @@ public class Prisoner {
 		return guessesRemaining;
 	}
 
-    public static class JsonSerializer extends com.fasterxml.jackson.databind.JsonSerializer {
-        @Override
-        public void serialize(Object value, JsonGenerator gen, SerializerProvider serializers) throws IOException, JsonProcessingException {
-            Prisoner prisoner = (Prisoner) value;
-            gen.writeObject(prisoner.toMap());
-        }
-    }
 }
