@@ -6,45 +6,43 @@ import it.xpug.frameworkless.hangman.domain.Game;
 import it.xpug.frameworkless.hangman.domain.GameIdGenerator;
 import it.xpug.frameworkless.hangman.domain.Prisoner;
 import org.hibernate.jpa.HibernatePersistenceProvider;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import java.math.BigInteger;
 import java.util.Optional;
 import java.util.Properties;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@Transactional
-@TestPropertySource("classpath:application-test.properties")
 public class GameRepositoryTest {
 
-    @Autowired
-    EntityManager entityManager;
+    EntityManager entityManager = createTestEntityManager();
 
-    @MockBean
-    GameIdGenerator gameIdGenerator;
+    GameIdGenerator gameIdGenerator = mock(GameIdGenerator.class);
 
-    @Autowired
-    GameRepository gameRepository;
+    GameRepository gameRepository = new GameRepository(gameIdGenerator, entityManager);
+
+    EntityTransaction transaction;
 
     @Before
     public void setUp() {
+        transaction = entityManager.getTransaction();
+        transaction.begin();
         entityManager.createNativeQuery("delete from hangman_games").executeUpdate();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        transaction.commit();
     }
 
     @Test

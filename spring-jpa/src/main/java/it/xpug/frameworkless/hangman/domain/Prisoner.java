@@ -4,6 +4,7 @@ import it.xpug.frameworkless.hangman.util.SetConverter;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Embeddable;
 import java.util.HashSet;
@@ -18,6 +19,7 @@ public class Prisoner {
 
 	private String word;
 
+	@Column(name = "guesses_remaining")
 	private int guessesRemaining = 18;
 
     @Convert(converter = SetConverter.class)
