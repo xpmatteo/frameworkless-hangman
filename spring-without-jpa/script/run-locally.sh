@@ -7,4 +7,4 @@ cd $(dirname $0)/..
 
 exec java \
   -XX:TieredStopAtLevel=1 -noverify \
-  -jar "build/libs/frameworkless-hangout-0.0.1-SNAPSHOT.jar" $*
+  -jar "build/libs/hangman-0.0.1-SNAPSHOT.jar" $*
