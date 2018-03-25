@@ -1,15 +1,19 @@
 package it.xpug.frameworkless.hangman;
 
+import com.mysql.cj.jdbc.MysqlDataSource;
 import it.xpug.frameworkless.hangman.db.GameRepository;
 import it.xpug.frameworkless.hangman.domain.Game;
 import it.xpug.frameworkless.hangman.domain.GameIdGenerator;
 import it.xpug.frameworkless.hangman.domain.Prisoner;
+import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.math.BigInteger;
 import java.util.Optional;
+import java.util.Properties;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -96,5 +101,28 @@ public class GameRepositoryTest {
         return entityManager.createNativeQuery(sql).getSingleResult();
     }
 
+    // does not work!!!
+    // https://stackoverflow.com/a/26814642/164802
+    public EntityManager createTestEntityManager() {
+        MysqlDataSource dataSource = new MysqlDataSource();
+        dataSource.setUrl("jdbc:mysql://localhost:3306/hangman_test?serverTimezone=UTC");
+        dataSource.setUser("hangman");
+        dataSource.setPassword("hangman");
+
+        Properties hibernateProperties = new Properties();
+        hibernateProperties.put("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver");
+        hibernateProperties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
+
+        final LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setDataSource(dataSource);
+        em.setPackagesToScan("it.xpug.frameworkless.hangman.domain");
+        em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+        em.setJpaProperties(hibernateProperties);
+        em.setPersistenceUnitName("default");
+        em.setPersistenceProviderClass(HibernatePersistenceProvider.class);
+        em.afterPropertiesSet();
+
+        return em.getObject().createEntityManager();
+    }
 
 }

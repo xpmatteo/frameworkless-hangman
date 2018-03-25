@@ -6,17 +6,18 @@ import it.xpug.frameworkless.hangman.domain.Prisoner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
 import java.util.Optional;
 
 @Service
 public class GameRepository {
     private GameIdGenerator gameIdGenerator;
-    private HangoutTable hangoutTable;
+    private EntityManager entityManager;
 
     @Autowired
-    public GameRepository(GameIdGenerator gameIdGenerator, HangoutTable hangoutTable) {
+    public GameRepository(GameIdGenerator gameIdGenerator, EntityManager entityManager) {
         this.gameIdGenerator = gameIdGenerator;
-        this.hangoutTable = hangoutTable;
+        this.entityManager = entityManager;
     }
 
     public Game createNewGame() {
@@ -25,12 +26,12 @@ public class GameRepository {
     }
 
     public Game save(Game newGame) {
-        hangoutTable.save(newGame);
+        entityManager.merge(newGame);
         return newGame;
     }
 
     public Optional<Game> findGame(Long gameId) {
-        Game found = hangoutTable.findOne(gameId);
+        Game found = entityManager.find(Game.class, gameId);
         if (null == found)
             return Optional.empty();
         return Optional.of(found);
