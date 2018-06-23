@@ -1,4 +1,4 @@
 #!/bin/bash
 
-./script/create-local-databases.sh
-./gradlew build
+echo "" | ./script/create-local-databases.sh
+./gradlew build --console plain

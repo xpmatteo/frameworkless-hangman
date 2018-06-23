@@ -29,6 +29,7 @@ do
   echo "$db created"
 
   echo "grant all on $db.* to '$dbuser'@localhost identified by '$dbpassword';" | do_mysql
+  echo "grant all on $db.* to '$dbuser'@'%' identified by '$dbpassword';" | do_mysql
   echo "$dbuser authorized"
 
   echo "Loading seed data"
