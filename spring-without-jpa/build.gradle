@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '1.5.10.RELEASE'
+        springBootVersion = '1.5.12.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -36,4 +36,10 @@ dependencies {
     compile 'mysql:mysql-connector-java:5.1.39'
     compile 'org.projectlombok:lombok:1.16.16'
     testCompile 'org.springframework.boot:spring-boot-starter-test'
+}
+
+test {
+    testLogging {
+        exceptionFormat = 'full'
+    }
 }
