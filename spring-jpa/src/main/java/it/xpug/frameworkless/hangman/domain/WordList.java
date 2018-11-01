@@ -33,10 +33,10 @@ public class WordList {
 		add("idiotic");
 		add("ineligibility");
 		add("inquire");
-		add("larky");
+		add("inquisitive");
 		add("learned");
 		add("legibility");
-		add("mesmerist");
+		add("mesmerize");
 		add("misshapen");
 		add("misstep");
 		add("mobile");
@@ -62,7 +62,6 @@ public class WordList {
 		add("snowlike");
 		add("succeed");
 		add("sunny");
-		add("superinquisitive");
 		add("superman");
 		add("tautonym");
 		add("thimble");

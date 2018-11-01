@@ -23,7 +23,7 @@ public class PrisonerTest {
 	@Test
 	public void randomWord() throws Exception {
 		WordList list = new WordList(new Random(123));
-		assertEquals("phototherapy", list.getRandomWord());
+		assertEquals("sunny", list.getRandomWord());
 	}
 
 	@Test
