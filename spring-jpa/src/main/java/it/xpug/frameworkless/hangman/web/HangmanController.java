@@ -30,10 +30,10 @@ public class HangmanController {
 
     @RequestMapping(path = "/hangman/game/{gameId}", method = RequestMethod.GET)
     public GameResponse findGame(@PathVariable String gameId) {
-        Optional<Game> maybeGame = gameRepository.findGame(Long.parseLong(gameId, 16));
-        if (!maybeGame.isPresent())
-            throw  new GameNotFoundException(gameId);
-        return GameResponse.from(maybeGame.get());
+        long gameIdAsLong = Long.parseLong(gameId, 16);
+        return gameRepository.findGame(gameIdAsLong)
+                .map(GameResponse::from)
+                .orElseThrow(() -> new GameNotFoundException(gameId));
     }
 
     @RequestMapping(path = "/hangman/game/{gameId}/guesses", method = RequestMethod.POST)
