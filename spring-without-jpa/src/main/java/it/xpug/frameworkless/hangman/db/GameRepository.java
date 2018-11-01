@@ -1,4 +1,4 @@
-package it.xpug.frameworkless.hangman;
+package it.xpug.frameworkless.hangman.db;
 
 import it.xpug.frameworkless.hangman.domain.Game;
 import it.xpug.frameworkless.hangman.domain.GameIdGenerator;

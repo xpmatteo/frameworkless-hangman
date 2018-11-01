@@ -1,7 +1,9 @@
-package it.xpug.frameworkless.hangman;
+package it.xpug.frameworkless.hangman.web;
 
+import it.xpug.frameworkless.hangman.db.GameRepository;
 import it.xpug.frameworkless.hangman.domain.Game;
 import it.xpug.frameworkless.hangman.domain.Prisoner;
+import it.xpug.frameworkless.hangman.web.HangmanController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package it.xpug.frameworkless.hangman;
+package it.xpug.frameworkless.hangman.db;
 
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;

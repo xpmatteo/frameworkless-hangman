@@ -1,5 +1,6 @@
-package it.xpug.frameworkless.hangman;
+package it.xpug.frameworkless.hangman.web;
 
+import it.xpug.frameworkless.hangman.db.GameRepository;
 import it.xpug.frameworkless.hangman.domain.Game;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
