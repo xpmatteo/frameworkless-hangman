@@ -1,16 +1,23 @@
-Prerequisites
+Prerequisites:
 
-    Java 8, gradle, mysql or mariadb
+ - Java 8 
+ - gradle
+ - mysql or mariadb
+ 
+Useful for testing:
+
+ - curl
+ - jq
 
 Run with
 
     script/create-local-databases.sh
     gradle build
-    java -jar ./build/libs/frameworkless-hangout-0.0.1-SNAPSHOT.jar
+    java -jar build/libs/hangman-0.0.1-SNAPSHOT.jar
 
 Test with
 
     curl -X POST localhost:8080/hangman/game | jq
-    curl localhost:8080/hangman/game/1465d2ab57dec5be | jq
-    curl -d guess=x localhost:8080/hangman/game/48d0fa5b3ae8ac40/guesses | jq
+    curl localhost:8080/hangman/game/<game id> | jq
+    curl -d guess=x localhost:8080/hangman/game/<game id>/guesses | jq
 

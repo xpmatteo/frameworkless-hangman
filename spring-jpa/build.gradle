@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '1.5.8.RELEASE'
+        springBootVersion = '1.5.12.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -8,10 +8,6 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     }
-}
-
-plugins {
-    id 'com.adarshr.test-logger' version '1.1.2'
 }
 
 apply plugin: 'java'
@@ -26,7 +22,6 @@ repositories {
     mavenCentral()
 }
 
-
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
     compile 'org.springframework.boot:spring-boot-starter-web'
@@ -34,4 +29,10 @@ dependencies {
     compile 'mysql:mysql-connector-java:6.0.6'
     compile 'org.projectlombok:lombok:1.16.16'
     testCompile 'org.springframework.boot:spring-boot-starter-test'
+}
+
+test {
+    testLogging {
+        exceptionFormat = 'full'
+    }
 }
