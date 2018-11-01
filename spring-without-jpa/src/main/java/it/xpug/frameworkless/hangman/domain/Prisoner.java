@@ -85,7 +85,7 @@ public class Prisoner {
 
     public static class JsonSerializer extends com.fasterxml.jackson.databind.JsonSerializer {
         @Override
-        public void serialize(Object value, JsonGenerator gen, SerializerProvider serializers) throws IOException, JsonProcessingException {
+        public void serialize(Object value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
             Prisoner prisoner = (Prisoner) value;
             gen.writeObject(prisoner.toMap());
         }
