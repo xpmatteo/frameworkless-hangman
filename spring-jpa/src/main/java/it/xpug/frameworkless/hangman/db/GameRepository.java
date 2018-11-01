@@ -26,14 +26,10 @@ public class GameRepository {
     }
 
     public Game save(Game newGame) {
-        entityManager.merge(newGame);
-        return newGame;
+        return entityManager.merge(newGame);
     }
 
     public Optional<Game> findGame(Long gameId) {
-        Game found = entityManager.find(Game.class, gameId);
-        if (null == found)
-            return Optional.empty();
-        return Optional.of(found);
+        return Optional.ofNullable(entityManager.find(Game.class, gameId));
     }
 }
