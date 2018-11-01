@@ -1,11 +1,8 @@
 package it.xpug.frameworkless.hangman.domain;
 
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import it.xpug.frameworkless.hangman.util.ToHexSerializer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

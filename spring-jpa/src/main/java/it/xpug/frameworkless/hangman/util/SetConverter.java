@@ -18,6 +18,6 @@ public class SetConverter implements AttributeConverter<Set<String>, String> {
     public Set<String> convertToEntityAttribute(String dbData) {
         if (dbData.isEmpty())
             return new HashSet<>();
-        return new HashSet<String>(stream(dbData.split("")).collect(toSet()));
+        return new HashSet<>(stream(dbData.split("")).collect(toSet()));
     }
 }
