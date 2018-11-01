@@ -5,12 +5,10 @@ import it.xpug.frameworkless.hangman.domain.Game;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-@Transactional
 public class HangmanController {
     private GameRepository gameRepository;
 
