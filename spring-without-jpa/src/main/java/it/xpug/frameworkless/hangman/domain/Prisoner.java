@@ -1,15 +1,9 @@
 package it.xpug.frameworkless.hangman.domain;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 
-import javax.persistence.Convert;
-import javax.persistence.Embeddable;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -17,16 +11,16 @@ import java.util.Set;
 
 @EqualsAndHashCode
 @ToString
-@JsonSerialize(using = Prisoner.JsonSerializer.class)
+@Getter
 public class Prisoner {
 
 	private String word;
 
 	private int guessesRemaining = 18;
 
-	private Set<String> misses = new HashSet<String>();
+	private Set<String> misses = new HashSet<>();
 
-	private Set<String> hits = new HashSet<String>();
+	private Set<String> hits = new HashSet<>();
 
 	public Prisoner() {
 		this(new WordList().getRandomWord());
@@ -42,11 +36,11 @@ public class Prisoner {
 		result.put("guesses_remaining", guessesRemaining);
 		result.put("misses", misses);
 		result.put("hits", hits);
-		result.put("state", state());
+		result.put("state", getState());
 		return result;
 	}
 
-	private String state() {
+	public String getState() {
 		if (word.equals(getMaskedWord() ))
 			return "rescued";
 		if (guessesRemaining > 0)
@@ -54,7 +48,7 @@ public class Prisoner {
 		return "lost";
 	}
 
-	private String getMaskedWord() {
+	public String getMaskedWord() {
 		String result = "";
 		for (int i=0; i<word.length(); i++) {
 			String c = word.substring(i, i+1);
@@ -82,12 +76,4 @@ public class Prisoner {
 	public int getGuessesRemaining() {
 		return guessesRemaining;
 	}
-
-    public static class JsonSerializer extends com.fasterxml.jackson.databind.JsonSerializer {
-        @Override
-        public void serialize(Object value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
-            Prisoner prisoner = (Prisoner) value;
-            gen.writeObject(prisoner.toMap());
-        }
-    }
 }

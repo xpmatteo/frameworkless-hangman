@@ -54,9 +54,9 @@ public class HangmanControllerTest {
         mockMvc.perform(get("/hangman/game/ff"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("gameId", is("ff")))
-                .andExpect(jsonPath("prisoner.guesses_remaining", is(18)))
-                .andExpect(jsonPath("prisoner.hits", is(emptyList())))
-                .andExpect(jsonPath("prisoner.misses", is(emptyList())))
+                .andExpect(jsonPath("guessesRemaining", is(18)))
+                .andExpect(jsonPath("hits", is(emptyList())))
+                .andExpect(jsonPath("misses", is(emptyList())))
         ;
     }
 
@@ -77,9 +77,9 @@ public class HangmanControllerTest {
         mockMvc.perform(post("/hangman/game/ff/guesses").param("guess", "x"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("gameId", is("ff")))
-                .andExpect(jsonPath("prisoner.guesses_remaining", is(17)))
-                .andExpect(jsonPath("prisoner.hits", is(emptyList())))
-                .andExpect(jsonPath("prisoner.misses", is(singletonList("x"))))
+                .andExpect(jsonPath("guessesRemaining", is(17)))
+                .andExpect(jsonPath("hits", is(emptyList())))
+                .andExpect(jsonPath("misses", is(singletonList("x"))))
         ;
 
         verify(gameRepository).update(game);
