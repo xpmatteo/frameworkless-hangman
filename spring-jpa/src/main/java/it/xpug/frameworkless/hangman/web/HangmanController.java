@@ -8,8 +8,6 @@ import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 @Transactional
@@ -38,12 +36,10 @@ public class HangmanController {
 
     @RequestMapping(path = "/hangman/game/{gameId}/guesses", method = RequestMethod.POST)
     public GameResponse guess(@PathVariable String gameId, @RequestParam String guess) {
-        if (guess.length() > 1)
+        if (guess.length() != 1)
             throw new InvalidGuessException(guess);
-        Optional<Game> maybeGame = gameRepository.findGame(Long.parseLong(gameId, 16));
-        if (!maybeGame.isPresent())
-            throw new GameNotFoundException(gameId);
-        Game game = maybeGame.get();
+        Game game = gameRepository.findGame(Long.parseLong(gameId, 16))
+                .orElseThrow(() -> new GameNotFoundException(gameId));
         game.getPrisoner().guess(guess);
         return GameResponse.from(game);
     }
