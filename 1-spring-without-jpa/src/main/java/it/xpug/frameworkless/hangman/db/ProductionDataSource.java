@@ -6,15 +6,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class HangmanDataSource extends MysqlDataSource {
+public class ProductionDataSource extends MysqlDataSource {
 
     // The actual values are set in the application.properties file
-    public HangmanDataSource(
-            @Value("${datasource.dbname}")   String dbname,
+    public ProductionDataSource(
+            @Value("${datasource.url}") String url,
             @Value("${datasource.username}") String username,
             @Value("${datasource.password}") String password)
     {
-        setDatabaseName(dbname);
+        setURL(url);
         setUser(username);
         setPassword(password);
     }
