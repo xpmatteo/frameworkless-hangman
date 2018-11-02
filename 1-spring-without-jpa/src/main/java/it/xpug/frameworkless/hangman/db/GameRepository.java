@@ -60,7 +60,10 @@ public class GameRepository {
     @SneakyThrows
     public void update(Game game) {
         String sql = "update hangman_games set " +
-                "word = ?, guesses_remaining = ?, hits = ?, misses = ? " +
+                "word = ?, " +
+                "guesses_remaining = ?, " +
+                "hits = ?, " +
+                "misses = ? " +
                 "where game_id = ? ";
         try (Connection connection = dataSource.getConnection()) {
             Prisoner prisoner = game.getPrisoner();
@@ -78,10 +81,12 @@ public class GameRepository {
 
     @SneakyThrows
     public Optional<Game> findGame(Long gameId) {
+        String sql = "select * from hangman_games where game_id = ?";
         try (Connection connection = dataSource.getConnection()) {
             ResultSetHandler<Optional<Game>> handler = rs -> {
-                if (!rs.next())
+                if (!rs.next()) {
                     return Optional.empty();
+                }
 
                 Prisoner prisoner = new Prisoner(rs.getString("word"));
                 set(prisoner, "guessesRemaining", rs.getObject("guesses_remaining"));
@@ -90,7 +95,6 @@ public class GameRepository {
                 Game game = new Game(gameId, prisoner);
                 return Optional.of(game);
             };
-            String sql = "select * from hangman_games where game_id = ?";
             return new QueryRunner().query(connection, sql, handler, gameId);
         }
     }
