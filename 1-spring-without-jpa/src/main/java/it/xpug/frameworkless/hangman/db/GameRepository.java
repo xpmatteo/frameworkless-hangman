@@ -37,7 +37,7 @@ public class GameRepository {
     }
 
     public Game createNewGame(String word) {
-        Game newGame = new Game(gameIdGenerator.generateGameId(), new Prisoner());
+        Game newGame = new Game(gameIdGenerator.generateGameId(), new Prisoner(word));
         return create(newGame);
     }
 

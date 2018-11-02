@@ -47,6 +47,19 @@ public class GameRepositoryTest {
         assertThat(gameCount(), is(1));
     }
 
+
+    @Test
+    public void createNewGameWithGivenWord() throws Exception {
+        when(gameIdGenerator.generateGameId()).thenReturn(33L);
+        assertThat(gameCount(), is(0));
+
+        Game game = gameRepository.createNewGame("aha");
+
+        assertThat(game.getGameId(), is(33L));
+        assertThat(game.getPrisoner().getWord(), is("aha"));
+        assertThat(gameCount(), is(1));
+    }
+
     @Test
     public void findGame() throws Exception {
         when(gameIdGenerator.generateGameId()).thenReturn(789L);
