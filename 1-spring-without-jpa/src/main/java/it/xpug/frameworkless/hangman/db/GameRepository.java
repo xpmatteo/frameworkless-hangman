@@ -36,6 +36,11 @@ public class GameRepository {
         return create(newGame);
     }
 
+    public Game createNewGame(String word) {
+        Game newGame = new Game(gameIdGenerator.generateGameId(), new Prisoner());
+        return create(newGame);
+    }
+
     @SneakyThrows
     public Game create(Game game) {
         String sql = "insert into hangman_games " +
