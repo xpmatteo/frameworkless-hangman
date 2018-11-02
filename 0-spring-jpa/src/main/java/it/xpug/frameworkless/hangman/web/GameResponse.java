@@ -26,8 +26,8 @@ public class GameResponse {
         gameResponse.gameId = game.getGameId();
 
         Prisoner prisoner = game.getPrisoner();
-        gameResponse.word = prisoner.getMaskedWord();
         BeanUtils.copyProperties(prisoner, gameResponse);
+        gameResponse.word = prisoner.getMaskedWord();
 
         return gameResponse;
     }

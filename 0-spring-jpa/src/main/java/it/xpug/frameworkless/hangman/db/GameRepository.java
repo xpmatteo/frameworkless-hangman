@@ -25,6 +25,11 @@ public class GameRepository {
         return save(newGame);
     }
 
+    public Game createNewGame(String word) {
+        Game newGame = new Game(gameIdGenerator.generateGameId(), new Prisoner(word));
+        return save(newGame);
+    }
+
     public Game save(Game newGame) {
         return entityManager.merge(newGame);
     }

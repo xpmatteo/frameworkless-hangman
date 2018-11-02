@@ -2,6 +2,7 @@ package it.xpug.frameworkless.hangman.domain;
 
 import it.xpug.frameworkless.hangman.util.SetConverter;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 
 import javax.persistence.Column;
@@ -17,6 +18,7 @@ import static java.util.Collections.unmodifiableSet;
 @ToString
 public class Prisoner {
 
+	@Getter
 	private String word;
 
 	@Column(name = "guesses_remaining")

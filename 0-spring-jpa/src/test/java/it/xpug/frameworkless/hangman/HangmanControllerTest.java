@@ -47,6 +47,16 @@ public class HangmanControllerTest {
     }
 
     @Test
+    public void createNewGameWithGivenWord() throws Exception {
+        when(gameRepository.createNewGame("zot")).thenReturn(new Game(16L));
+
+        mockMvc.perform(post("/hangman/game").param("word", "zot"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("gameId", is("10")))
+        ;
+    }
+
+    @Test
     public void findGame() throws Exception {
         Game game = new Game(255L);
         when(gameRepository.findGame(255L)).thenReturn(Optional.of(game));

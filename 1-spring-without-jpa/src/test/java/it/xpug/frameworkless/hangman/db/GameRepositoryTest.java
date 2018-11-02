@@ -47,7 +47,6 @@ public class GameRepositoryTest {
         assertThat(gameCount(), is(1));
     }
 
-
     @Test
     public void createNewGameWithGivenWord() throws Exception {
         when(gameIdGenerator.generateGameId()).thenReturn(33L);
