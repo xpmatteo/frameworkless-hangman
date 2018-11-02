@@ -2,13 +2,12 @@ package it.xpug.frameworkless.hangman.domain;
 
 import org.junit.Test;
 
-import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-import static org.hamcrest.Matchers.is;
+import static java.util.Arrays.stream;
+import static java.util.stream.Collectors.toSet;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 
 public class PrisonerTest {
 	Prisoner prisoner = new Prisoner("someword");
@@ -18,12 +17,6 @@ public class PrisonerTest {
 		assertEquals("********", prisoner.getMaskedWord());
 		assertEquals(18, prisoner.getGuessesRemaining());
 		assertEquals("help", prisoner.getState());
-	}
-
-	@Test
-	public void randomWord() throws Exception {
-		WordList list = new WordList(new Random(123));
-		assertEquals("sunny", list.getRandomWord());
 	}
 
 	@Test
@@ -50,12 +43,6 @@ public class PrisonerTest {
 		assertEquals("lost", prisoner.getState());
 	}
 
-	private void miss18times() {
-		for (int i = 0; i < 18; i++) {
-			prisoner.guess("a");
-		}
-	}
-
 	@Test
 	public void win() throws Exception {
 		prisoner.guess("s");
@@ -76,11 +63,13 @@ public class PrisonerTest {
 		assertEquals(0, prisoner.getGuessesRemaining());
 	}
 
-    private Set<String> set(String ... strings) {
-		Set<String> result = new HashSet<String>();
-		for (String string : strings) {
-			result.add(string);
+	private void miss18times() {
+		for (int i = 0; i < 18; i++) {
+			prisoner.guess("a");
 		}
-		return result;
+	}
+
+    private Set<String> set(String ... strings) {
+		return stream(strings).collect(toSet());
 	}
 }
