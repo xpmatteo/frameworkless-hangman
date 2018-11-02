@@ -14,40 +14,34 @@ public class PrisonerTest {
 	Prisoner prisoner = new Prisoner("someword");
 
 	@Test
-	public void newPrisonerToJSON() {
-		assertEquals("********", get("word"));
-		assertEquals(18, get("guesses_remaining"));
-		assertEquals("help", get("state"));
-	}
-
-	@Test
-	public void randomWord() throws Exception {
-		WordList list = new WordList(new Random(123));
-		assertEquals("sunny", list.getRandomWord());
+	public void newPrisoner() {
+		assertEquals(18, prisoner.getGuessesRemaining());
+		assertEquals("help", prisoner.getState());
+		assertEquals("********", prisoner.getMaskedWord());
 	}
 
 	@Test
 	public void miss() throws Exception {
 		prisoner.guess("a");
-		assertEquals(17, get("guesses_remaining"));
-		assertEquals(set("a"), get("misses"));
-		assertEquals(set(), get("hits"));
-		assertEquals("********", get("word"));
+		assertEquals(17, prisoner.getGuessesRemaining());
+		assertEquals(set("a"), prisoner.getMisses());
+		assertEquals(set(), prisoner.getHits());
+		assertEquals("********", prisoner.getMaskedWord());
 	}
 
 	@Test
 	public void hit() throws Exception {
 		prisoner.guess("o");
-		assertEquals(17, get("guesses_remaining"));
-		assertEquals(set(), get("misses"));
-		assertEquals(set("o"), get("hits"));
-		assertEquals("*o***o**", get("word"));
+		assertEquals(17, prisoner.getGuessesRemaining());
+		assertEquals(set(), prisoner.getMisses());
+		assertEquals(set("o"), prisoner.getHits());
+		assertEquals("*o***o**", prisoner.getMaskedWord());
 	}
 
 	@Test
 	public void lose() throws Exception {
 		miss18times();
-		assertEquals("lost", get("state"));
+		assertEquals("lost", prisoner.getState());
 	}
 
 	private void miss18times() {
@@ -65,15 +59,15 @@ public class PrisonerTest {
 		prisoner.guess("w");
 		prisoner.guess("r");
 		prisoner.guess("d");
-		assertEquals("rescued", get("state"));
+		assertEquals("rescued", prisoner.getState());
 	}
 
 	@Test
 	public void noFurtherGuesses() throws Exception {
 		miss18times();
 		prisoner.guess("x");
-		assertEquals(set("a"), get("misses"));
-		assertEquals(0, get("guesses_remaining"));
+		assertEquals(set("a"), prisoner.getMisses());
+		assertEquals(0, prisoner.getGuessesRemaining());
 	}
 
     private Set<String> set(String ... strings) {
@@ -82,9 +76,5 @@ public class PrisonerTest {
 			result.add(string);
 		}
 		return result;
-	}
-
-	private Object get(String key) {
-		return prisoner.toMap().get(key);
 	}
 }

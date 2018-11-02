@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 import javax.sql.DataSource;
 import java.lang.reflect.Field;
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -81,21 +79,19 @@ public class GameRepository {
     @SneakyThrows
     public Optional<Game> findGame(Long gameId) {
         try (Connection connection = dataSource.getConnection()) {
-            ResultSetHandler<Optional<Game>> handler = new ResultSetHandler<Optional<Game>>() {
-                @Override
-                public Optional<Game> handle(ResultSet rs) throws SQLException {
-                    if (!rs.next())
-                        return Optional.empty();
+            ResultSetHandler<Optional<Game>> handler = rs -> {
+                if (!rs.next())
+                    return Optional.empty();
 
-                    Prisoner prisoner = new Prisoner(rs.getString("word"));
-                    set(prisoner, "guessesRemaining", rs.getObject("guesses_remaining"));
-                    set(prisoner, "hits", convertStringToCharSet(rs.getString("hits")));
-                    set(prisoner, "misses", convertStringToCharSet(rs.getString("misses")));
-                    Game game = new Game(gameId, prisoner);
-                    return Optional.of(game);
-                }
+                Prisoner prisoner = new Prisoner(rs.getString("word"));
+                set(prisoner, "guessesRemaining", rs.getObject("guesses_remaining"));
+                set(prisoner, "hits", convertStringToCharSet(rs.getString("hits")));
+                set(prisoner, "misses", convertStringToCharSet(rs.getString("misses")));
+                Game game = new Game(gameId, prisoner);
+                return Optional.of(game);
             };
-            return new QueryRunner().query(connection, "select * from hangman_games where game_id = ?", handler, gameId);
+            String sql = "select * from hangman_games where game_id = ?";
+            return new QueryRunner().query(connection, sql, handler, gameId);
         }
     }
 
@@ -116,7 +112,7 @@ public class GameRepository {
     private Set<String> convertStringToCharSet(String dbData) {
         if (dbData.isEmpty())
             return new HashSet<>();
-        return new HashSet<>(stream(dbData.split("")).collect(toSet()));
+        return stream(dbData.split("")).collect(toSet());
     }
 
     private String convertCharSetToString(Set<String> set) {
