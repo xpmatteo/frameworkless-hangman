@@ -1,9 +1,6 @@
 package it.xpug.frameworkless.hangman;
 
-import it.xpug.frameworkless.hangman.web.GameResponse;
-import it.xpug.frameworkless.hangman.web.HangmanController;
-import it.xpug.frameworkless.hangman.web.WebRequest;
-import it.xpug.frameworkless.hangman.web.WebResponse;
+import it.xpug.frameworkless.hangman.web.*;
 
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -34,13 +31,18 @@ public class HangmanRouter {
             webResponse.respond(SC_OK, hangmanController.findGame(matcher.group(1)));
             return;
         }
-        Optional<String> word = webRequest.getParameter("word");
 
-        GameResponse gameResponse =
-                word.map(hangmanController::createNewGame)
-                        .orElseGet(() -> hangmanController.createNewGame(null));
+        if (webRequest.getPath().equals("/hangman/game")) {
+            Optional<String> word = webRequest.getParameter("word");
 
-        webResponse.respond(SC_CREATED, gameResponse);
+            GameResponse gameResponse =
+                    word.map(hangmanController::createNewGame)
+                            .orElseGet(() -> hangmanController.createNewGame(null));
+
+            webResponse.respond(SC_CREATED, gameResponse);
+        }
+
+        throw new NotFoundExeption(webRequest.getPath());
     }
 
 }

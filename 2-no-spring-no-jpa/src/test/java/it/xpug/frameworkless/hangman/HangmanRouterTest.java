@@ -1,10 +1,7 @@
 package it.xpug.frameworkless.hangman;
 
 import it.xpug.frameworkless.hangman.domain.Game;
-import it.xpug.frameworkless.hangman.web.GameResponse;
-import it.xpug.frameworkless.hangman.web.HangmanController;
-import it.xpug.frameworkless.hangman.web.WebRequest;
-import it.xpug.frameworkless.hangman.web.WebResponse;
+import it.xpug.frameworkless.hangman.web.*;
 import org.junit.Test;
 
 import java.util.Optional;
@@ -61,6 +58,15 @@ public class HangmanRouterTest {
         hangmanRouter.route(webRequest, webResponse);
 
         verify(webResponse).error(anException);
+    }
+
+    @Test
+    public void pathNotFound() throws Exception {
+        get("/foobar");
+
+        hangmanRouter.route(webRequest, webResponse);
+
+        verify(webResponse).error(new NotFoundExeption("/foobar"));
     }
 
     private void post(String path, String parameterName, Optional<String> parameterValue) {
