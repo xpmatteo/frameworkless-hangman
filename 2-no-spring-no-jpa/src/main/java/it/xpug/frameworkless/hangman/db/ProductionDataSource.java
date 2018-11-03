@@ -2,20 +2,24 @@ package it.xpug.frameworkless.hangman.db;
 
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ProductionDataSource extends MysqlDataSource {
 
-    // The actual values are set in the application.properties file
-    public ProductionDataSource(
-            @Value("${datasource.url}") String url,
-            @Value("${datasource.username}") String username,
-            @Value("${datasource.password}") String password)
-    {
+    public static final String LOCAL_DEVELOPMENT_DATABASE = "jdbc:mysql://127.0.0.1:3306/hangman?user=hangman&password=hangman";
+    public static final String ENV_VARIABLE_NAME = "DATABASE_URL";
+
+    public ProductionDataSource() {
+        this(findUrl());
+    }
+
+    ProductionDataSource(String url) {
         setURL(url);
-        setUser(username);
-        setPassword(password);
+    }
+
+    private static String findUrl() {
+        String url = System.getenv(ENV_VARIABLE_NAME);
+        return url == null ? LOCAL_DEVELOPMENT_DATABASE : url;
     }
 }
