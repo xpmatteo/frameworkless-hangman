@@ -10,6 +10,10 @@ buildscript {
     }
 }
 
+plugins {
+    id "com.github.johnrengelman.shadow" version "2.0.4"
+}
+
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
@@ -23,8 +27,8 @@ repositories {
     mavenCentral()
 }
 
-
 dependencies {
+    compile 'ch.qos.logback:logback-classic:1.2.3'
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.9.7'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.9.7'
     compile 'commons-dbutils:commons-dbutils:1.7'
@@ -32,6 +36,7 @@ dependencies {
     compile 'org.eclipse.jetty:jetty-servlet:9.4.10.RC1'
     compile 'org.eclipse.jetty:jetty-webapp:9.4.10.RC1'
     compile 'org.projectlombok:lombok:1.16.16'
+    compile 'org.slf4j:slf4j-api:1.7.25'
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.18.3'
@@ -41,4 +46,8 @@ test {
     testLogging {
         exceptionFormat = 'full'
     }
+}
+
+jar {
+    manifest { attributes 'Main-Class': 'it.xpug.frameworkless.hangman.Main' }
 }
