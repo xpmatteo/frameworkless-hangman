@@ -25,9 +25,7 @@ public class HangmanRouterTest {
 
     @Test
     public void createNewGame() throws Exception {
-        when(webRequest.getPath()).thenReturn("/hangman/game");
-        when(webRequest.getMethod()).thenReturn(POST);
-        when(webRequest.getParameter("word")).thenReturn(Optional.empty());
+        post("/hangman/game", "word", Optional.empty());
         when(hangmanController.createNewGame(null)).thenReturn(aGameResponse);
 
         hangmanRouter.route(webRequest, webResponse);
@@ -37,9 +35,7 @@ public class HangmanRouterTest {
 
     @Test
     public void createNewGameWithSpecifiedWord() throws Exception {
-        when(webRequest.getPath()).thenReturn("/hangman/game");
-        when(webRequest.getMethod()).thenReturn(POST);
-        when(webRequest.getParameter("word")).thenReturn(Optional.of("foobar"));
+        post("/hangman/game", "word", Optional.of("foobar"));
         when(hangmanController.createNewGame("foobar")).thenReturn(aGameResponse);
 
         hangmanRouter.route(webRequest, webResponse);
@@ -49,8 +45,7 @@ public class HangmanRouterTest {
 
     @Test
     public void findGame_found() throws Exception {
-        when(webRequest.getPath()).thenReturn("/hangman/game/abc123");
-        when(webRequest.getMethod()).thenReturn(GET);
+        get("/hangman/game/abc123");
         when(hangmanController.findGame("abc123")).thenReturn(aGameResponse);
 
         hangmanRouter.route(webRequest, webResponse);
@@ -60,13 +55,23 @@ public class HangmanRouterTest {
 
     @Test
     public void findGame_notFound() throws Exception {
-        when(webRequest.getPath()).thenReturn("/hangman/game/abc123");
-        when(webRequest.getMethod()).thenReturn(GET);
-        when(hangmanController.findGame("abc123")).thenThrow(anException);
+        get("/hangman/game/567def");
+        when(hangmanController.findGame("567def")).thenThrow(anException);
 
         hangmanRouter.route(webRequest, webResponse);
 
         verify(webResponse).error(anException);
+    }
+
+    private void post(String path, String parameterName, Optional<String> parameterValue) {
+        when(webRequest.getMethod()).thenReturn(POST);
+        when(webRequest.getPath()).thenReturn(path);
+        when(webRequest.getParameter(parameterName)).thenReturn(parameterValue);
+    }
+
+    private void get(String path) {
+        when(webRequest.getMethod()).thenReturn(GET);
+        when(webRequest.getPath()).thenReturn(path);
     }
 
 }
