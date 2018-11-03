@@ -1,22 +1,16 @@
 package it.xpug.frameworkless.hangman;
 
-import it.xpug.frameworkless.hangman.db.GameRepository;
 import it.xpug.frameworkless.hangman.web.GameResponse;
 import it.xpug.frameworkless.hangman.web.HangmanController;
 import it.xpug.frameworkless.hangman.web.WebRequest;
 import it.xpug.frameworkless.hangman.web.WebResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.web.WebApplicationInitializer;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static javax.servlet.http.HttpServletResponse.SC_CREATED;
+import static javax.servlet.http.HttpServletResponse.SC_OK;
 
 public class HangmanRouter {
 
@@ -27,6 +21,19 @@ public class HangmanRouter {
     }
 
     public void route(WebRequest webRequest, WebResponse webResponse) {
+        try {
+            doRoute(webRequest, webResponse);
+        } catch (Exception e) {
+            webResponse.error(e);
+        }
+    }
+
+    private void doRoute(WebRequest webRequest, WebResponse webResponse) {
+        Matcher matcher = Pattern.compile("/hangman/game/([a-f0-9]+)").matcher(webRequest.getPath());
+        if (matcher.matches()) {
+            webResponse.respond(SC_OK, hangmanController.findGame(matcher.group(1)));
+            return;
+        }
         Optional<String> word = webRequest.getParameter("word");
 
         GameResponse gameResponse =

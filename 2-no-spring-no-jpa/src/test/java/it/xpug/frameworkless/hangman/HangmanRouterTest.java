@@ -1,28 +1,16 @@
 package it.xpug.frameworkless.hangman;
 
-import it.xpug.frameworkless.hangman.db.GameRepository;
 import it.xpug.frameworkless.hangman.domain.Game;
 import it.xpug.frameworkless.hangman.web.GameResponse;
 import it.xpug.frameworkless.hangman.web.HangmanController;
 import it.xpug.frameworkless.hangman.web.WebRequest;
 import it.xpug.frameworkless.hangman.web.WebResponse;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import java.util.Optional;
 
+import static it.xpug.frameworkless.hangman.web.HttpMethod.GET;
 import static it.xpug.frameworkless.hangman.web.HttpMethod.POST;
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
 import static org.mockito.Mockito.*;
 
 public class HangmanRouterTest {
@@ -30,25 +18,21 @@ public class HangmanRouterTest {
     private HangmanController hangmanController = mock(HangmanController.class);
     private WebRequest webRequest = mock(WebRequest.class);
     private WebResponse webResponse = mock(WebResponse.class);
+    private GameResponse aGameResponse = GameResponse.from(new Game(0x77L));
 
     private HangmanRouter hangmanRouter = new HangmanRouter(hangmanController);
-
-//    @Before
-//    public void setUp() throws Exception {
-//        when(webRequest.getParameter(anyString())).thenThrow(new RuntimeException("unexpected call"));
-//    }
+    private RuntimeException anException = new RuntimeException("abababa");
 
     @Test
     public void createNewGame() throws Exception {
         when(webRequest.getPath()).thenReturn("/hangman/game");
         when(webRequest.getMethod()).thenReturn(POST);
         when(webRequest.getParameter("word")).thenReturn(Optional.empty());
-        GameResponse gameResponse = GameResponse.from(new Game(0x77L));
-        when(hangmanController.createNewGame(null)).thenReturn(gameResponse);
+        when(hangmanController.createNewGame(null)).thenReturn(aGameResponse);
 
         hangmanRouter.route(webRequest, webResponse);
 
-        verify(webResponse).respond(201, gameResponse);
+        verify(webResponse).respond(201, aGameResponse);
     }
 
     @Test
@@ -56,11 +40,33 @@ public class HangmanRouterTest {
         when(webRequest.getPath()).thenReturn("/hangman/game");
         when(webRequest.getMethod()).thenReturn(POST);
         when(webRequest.getParameter("word")).thenReturn(Optional.of("foobar"));
-        GameResponse gameResponse = GameResponse.from(new Game(0x77L));
-        when(hangmanController.createNewGame("foobar")).thenReturn(gameResponse);
+        when(hangmanController.createNewGame("foobar")).thenReturn(aGameResponse);
 
         hangmanRouter.route(webRequest, webResponse);
 
-        verify(webResponse).respond(201, gameResponse);
+        verify(webResponse).respond(201, aGameResponse);
     }
+
+    @Test
+    public void findGame_found() throws Exception {
+        when(webRequest.getPath()).thenReturn("/hangman/game/abc123");
+        when(webRequest.getMethod()).thenReturn(GET);
+        when(hangmanController.findGame("abc123")).thenReturn(aGameResponse);
+
+        hangmanRouter.route(webRequest, webResponse);
+
+        verify(webResponse).respond(200, aGameResponse);
+    }
+
+    @Test
+    public void findGame_notFound() throws Exception {
+        when(webRequest.getPath()).thenReturn("/hangman/game/abc123");
+        when(webRequest.getMethod()).thenReturn(GET);
+        when(hangmanController.findGame("abc123")).thenThrow(anException);
+
+        hangmanRouter.route(webRequest, webResponse);
+
+        verify(webResponse).error(anException);
+    }
+
 }
