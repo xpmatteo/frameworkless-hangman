@@ -3,12 +3,9 @@ package it.xpug.frameworkless.hangman.domain;
 import org.junit.Test;
 
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
 
-import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 
 public class PrisonerTest {
 	Prisoner prisoner = new Prisoner("someword");

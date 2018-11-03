@@ -1,14 +1,14 @@
 package it.xpug.frameworkless.hangman.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.JsonPath;
 import it.xpug.frameworkless.hangman.domain.Game;
 import it.xpug.frameworkless.hangman.domain.Prisoner;
 import org.junit.Before;
 import org.junit.Test;
 
 import static java.util.Collections.singleton;
-import static org.hamcrest.Matchers.is;
+
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 

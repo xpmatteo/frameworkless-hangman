@@ -2,9 +2,7 @@ package it.xpug.frameworkless.hangman.db;
 
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
-import org.springframework.stereotype.Component;
 
-@Component
 public class ProductionDataSource extends MysqlDataSource {
 
     public static final String LOCAL_DEVELOPMENT_DATABASE = "jdbc:mysql://127.0.0.1:3306/hangman?user=hangman&password=hangman";

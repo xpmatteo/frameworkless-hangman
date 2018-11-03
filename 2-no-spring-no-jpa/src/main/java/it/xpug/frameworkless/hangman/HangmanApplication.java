@@ -1,12 +1,12 @@
 package it.xpug.frameworkless.hangman;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+import it.xpug.hangman.web.toolkit.ReusableJettyApp;
+
 public class HangmanApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(HangmanApplication.class, args);
+		ReusableJettyApp app = new ReusableJettyApp(HangmanServlet.class);
+		app.start(8080, "src/main/webapp");
 	}
 }

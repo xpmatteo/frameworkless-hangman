@@ -6,8 +6,6 @@ import it.xpug.frameworkless.hangman.domain.Prisoner;
 import lombok.SneakyThrows;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
 import java.lang.reflect.Field;
@@ -20,12 +18,10 @@ import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toSet;
 
-@Service
 public class GameRepository {
     private GameIdGenerator gameIdGenerator;
     private DataSource dataSource;
 
-    @Autowired
     public GameRepository(GameIdGenerator gameIdGenerator, DataSource dataSource) {
         this.gameIdGenerator = gameIdGenerator;
         this.dataSource = dataSource;

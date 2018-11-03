@@ -6,7 +6,6 @@ import it.xpug.frameworkless.hangman.domain.Prisoner;
 import it.xpug.frameworkless.hangman.util.ToHexSerializer;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.BeanUtils;
 
 import java.util.Set;
 
@@ -26,7 +25,10 @@ public class GameResponse {
         gameResponse.gameId = game.getGameId();
 
         Prisoner prisoner = game.getPrisoner();
-        BeanUtils.copyProperties(prisoner, gameResponse);
+        gameResponse.state = prisoner.getState();
+        gameResponse.hits = prisoner.getHits();
+        gameResponse.misses = prisoner.getMisses();
+        gameResponse.guessesRemaining = prisoner.getGuessesRemaining();
         gameResponse.word = prisoner.getMaskedWord();
 
         return gameResponse;
