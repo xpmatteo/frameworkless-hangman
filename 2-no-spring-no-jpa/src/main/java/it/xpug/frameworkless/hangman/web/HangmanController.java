@@ -2,6 +2,7 @@ package it.xpug.frameworkless.hangman.web;
 
 import it.xpug.frameworkless.hangman.db.GameRepository;
 import it.xpug.frameworkless.hangman.domain.Game;
+import it.xpug.frameworkless.hangman.web.toolkit.ClientError;
 
 import java.util.Optional;
 

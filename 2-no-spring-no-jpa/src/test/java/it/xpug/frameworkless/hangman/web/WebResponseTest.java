@@ -1,6 +1,8 @@
 package it.xpug.frameworkless.hangman.web;
 
 import it.xpug.frameworkless.hangman.FakeHttpServletResponse;
+import it.xpug.frameworkless.hangman.web.toolkit.ClientError;
+import it.xpug.frameworkless.hangman.web.toolkit.WebResponse;
 import lombok.Getter;
 import org.junit.Test;
 
@@ -64,7 +66,7 @@ public class WebResponseTest {
         assertThat(httpServletResponse.getStatus(), is(400));
         assertThat(httpServletResponse.getContentType(), is("application/json"));
         String expectedBody = "{" +
-                "\"exception\":\"it.xpug.frameworkless.hangman.web.ClientError\"," +
+                "\"exception\":\"it.xpug.frameworkless.hangman.web.toolkit.ClientError\"," +
                 "\"message\":\"you got something wrong\"," +
                 "\"status\":400" +
                 "}";

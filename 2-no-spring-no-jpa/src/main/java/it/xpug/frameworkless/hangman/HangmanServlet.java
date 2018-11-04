@@ -4,8 +4,8 @@ import it.xpug.frameworkless.hangman.db.GameRepository;
 import it.xpug.frameworkless.hangman.db.ProductionDataSource;
 import it.xpug.frameworkless.hangman.domain.RandomGameIdGenerator;
 import it.xpug.frameworkless.hangman.web.HangmanController;
-import it.xpug.frameworkless.hangman.web.WebRequest;
-import it.xpug.frameworkless.hangman.web.WebResponse;
+import it.xpug.frameworkless.hangman.web.toolkit.WebRequest;
+import it.xpug.frameworkless.hangman.web.toolkit.WebResponse;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

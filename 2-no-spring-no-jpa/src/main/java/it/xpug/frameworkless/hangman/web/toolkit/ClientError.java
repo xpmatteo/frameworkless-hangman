@@ -1,4 +1,4 @@
-package it.xpug.frameworkless.hangman.web;
+package it.xpug.frameworkless.hangman.web.toolkit;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

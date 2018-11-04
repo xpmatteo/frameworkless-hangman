@@ -1,5 +1,6 @@
 package it.xpug.frameworkless.hangman.web;
 
+import it.xpug.frameworkless.hangman.web.toolkit.NotFoundException;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

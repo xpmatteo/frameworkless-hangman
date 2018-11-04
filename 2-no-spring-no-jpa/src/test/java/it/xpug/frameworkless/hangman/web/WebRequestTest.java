@@ -1,13 +1,14 @@
 package it.xpug.frameworkless.hangman.web;
 
+import it.xpug.frameworkless.hangman.web.toolkit.WebRequest;
 import org.junit.Test;
 
 import javax.servlet.http.HttpServletRequest;
 
 import java.util.Optional;
 
-import static it.xpug.frameworkless.hangman.web.HttpMethod.GET;
-import static it.xpug.frameworkless.hangman.web.HttpMethod.OTHER;
+import static it.xpug.frameworkless.hangman.web.toolkit.HttpMethod.GET;
+import static it.xpug.frameworkless.hangman.web.toolkit.HttpMethod.OTHER;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.mockito.Mockito.*;

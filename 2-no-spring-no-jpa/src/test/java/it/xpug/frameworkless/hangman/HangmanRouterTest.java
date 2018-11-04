@@ -2,12 +2,15 @@ package it.xpug.frameworkless.hangman;
 
 import it.xpug.frameworkless.hangman.domain.Game;
 import it.xpug.frameworkless.hangman.web.*;
+import it.xpug.frameworkless.hangman.web.toolkit.NotFoundException;
+import it.xpug.frameworkless.hangman.web.toolkit.WebRequest;
+import it.xpug.frameworkless.hangman.web.toolkit.WebResponse;
 import org.junit.Test;
 
 import java.util.Optional;
 
-import static it.xpug.frameworkless.hangman.web.HttpMethod.GET;
-import static it.xpug.frameworkless.hangman.web.HttpMethod.POST;
+import static it.xpug.frameworkless.hangman.web.toolkit.HttpMethod.GET;
+import static it.xpug.frameworkless.hangman.web.toolkit.HttpMethod.POST;
 import static org.mockito.Mockito.*;
 
 public class HangmanRouterTest {
