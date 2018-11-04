@@ -8,4 +8,8 @@ before_script:
 install: true
 script:
   - script/ci.sh
+cache:
+  directories:
+  - $HOME/.gradle
+
 
