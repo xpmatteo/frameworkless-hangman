@@ -32,10 +32,9 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.9.7'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.9.7'
     compile 'commons-dbutils:commons-dbutils:1.7'
-    compile 'mysql:mysql-connector-java:5.1.39'
-    compile 'org.eclipse.jetty:jetty-servlet:9.4.10.RC1'
-    compile 'org.eclipse.jetty:jetty-webapp:9.4.10.RC1'
-    compile 'org.projectlombok:lombok:1.16.16'
+    compile 'mysql:mysql-connector-java:5.1.47'
+    compile 'org.eclipse.jetty:jetty-servlet:9.4.12.v20180830'
+    compile 'org.projectlombok:lombok:1.18.4'
     compile 'org.slf4j:slf4j-api:1.7.25'
 
     testCompile 'junit:junit:4.12'
