@@ -1,8 +1,9 @@
-package it.xpug.frameworkless.hangman.web;
+package it.xpug.frameworkless.hangman.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.xpug.frameworkless.hangman.domain.Game;
 import it.xpug.frameworkless.hangman.domain.Prisoner;
+import it.xpug.frameworkless.hangman.service.GameResponse;
 import org.junit.Before;
 import org.junit.Test;
 

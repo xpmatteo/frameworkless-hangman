@@ -1,32 +1,30 @@
-package it.xpug.frameworkless.hangman;
+package it.xpug.frameworkless.hangman.web;
 
 import it.xpug.frameworkless.hangman.domain.Game;
-import it.xpug.frameworkless.hangman.web.*;
-import it.xpug.frameworkless.hangman.web.toolkit.NotFoundException;
-import it.xpug.frameworkless.hangman.web.toolkit.WebRequest;
-import it.xpug.frameworkless.hangman.web.toolkit.WebResponse;
+import it.xpug.frameworkless.hangman.service.GameResponse;
+import it.xpug.frameworkless.hangman.service.HangmanService;
 import org.junit.Test;
 
 import java.util.Optional;
 
-import static it.xpug.frameworkless.hangman.web.toolkit.HttpMethod.GET;
-import static it.xpug.frameworkless.hangman.web.toolkit.HttpMethod.POST;
+import static it.xpug.frameworkless.hangman.web.HttpMethod.GET;
+import static it.xpug.frameworkless.hangman.web.HttpMethod.POST;
 import static org.mockito.Mockito.*;
 
 public class HangmanRouterTest {
 
-    private HangmanController hangmanController = mock(HangmanController.class);
+    private HangmanService hangmanService = mock(HangmanService.class);
     private WebRequest webRequest = mock(WebRequest.class);
     private WebResponse webResponse = mock(WebResponse.class);
     private GameResponse aGameResponse = GameResponse.from(new Game(0x77L));
 
-    private HangmanRouter hangmanRouter = new HangmanRouter(webRequest, webResponse, hangmanController);
+    private HangmanRouter hangmanRouter = new HangmanRouter(webRequest, webResponse, hangmanService);
     private RuntimeException anException = new RuntimeException("abababa");
 
     @Test
     public void createNewGame() throws Exception {
         post("/hangman/game", "word", Optional.empty());
-        when(hangmanController.createNewGame(null)).thenReturn(aGameResponse);
+        when(hangmanService.createNewGame(null)).thenReturn(aGameResponse);
 
         hangmanRouter.route();
 
@@ -36,7 +34,7 @@ public class HangmanRouterTest {
     @Test
     public void createNewGameWithSpecifiedWord() throws Exception {
         post("/hangman/game", "word", Optional.of("foobar"));
-        when(hangmanController.createNewGame("foobar")).thenReturn(aGameResponse);
+        when(hangmanService.createNewGame("foobar")).thenReturn(aGameResponse);
 
         hangmanRouter.route();
 
@@ -46,7 +44,7 @@ public class HangmanRouterTest {
     @Test
     public void findGame_found() throws Exception {
         get("/hangman/game/abc123");
-        when(hangmanController.findGame("abc123")).thenReturn(aGameResponse);
+        when(hangmanService.findGame("abc123")).thenReturn(aGameResponse);
 
         hangmanRouter.route();
 
@@ -56,7 +54,7 @@ public class HangmanRouterTest {
     @Test
     public void findGame_notFound() throws Exception {
         get("/hangman/game/567def");
-        when(hangmanController.findGame("567def")).thenThrow(anException);
+        when(hangmanService.findGame("567def")).thenThrow(anException);
 
         hangmanRouter.route();
 
@@ -75,7 +73,7 @@ public class HangmanRouterTest {
     @Test
     public void guess() throws Exception {
         post("/hangman/game/123/guesses", "guess", Optional.of("x"));
-        when(hangmanController.guess("123", Optional.of("x"))).thenReturn(aGameResponse);
+        when(hangmanService.guess("123", Optional.of("x"))).thenReturn(aGameResponse);
 
         hangmanRouter.route();
 

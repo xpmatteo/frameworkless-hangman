@@ -1,7 +1,6 @@
-package it.xpug.frameworkless.hangman.web.toolkit;
+package it.xpug.frameworkless.hangman.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.xpug.frameworkless.hangman.web.toolkit.ClientError;
 import lombok.Getter;
 
 import javax.servlet.http.HttpServletResponse;

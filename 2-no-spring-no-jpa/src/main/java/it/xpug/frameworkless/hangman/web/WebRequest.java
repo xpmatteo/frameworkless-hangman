@@ -1,6 +1,4 @@
-package it.xpug.frameworkless.hangman.web.toolkit;
-
-import it.xpug.frameworkless.hangman.web.toolkit.HttpMethod;
+package it.xpug.frameworkless.hangman.web;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;

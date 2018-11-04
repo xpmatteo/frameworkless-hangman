@@ -1,4 +1,4 @@
-package it.xpug.frameworkless.hangman.web;
+package it.xpug.frameworkless.hangman.service;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import it.xpug.frameworkless.hangman.domain.Game;

@@ -1,18 +1,18 @@
-package it.xpug.frameworkless.hangman.web;
+package it.xpug.frameworkless.hangman.service;
 
 import it.xpug.frameworkless.hangman.db.GameRepository;
 import it.xpug.frameworkless.hangman.domain.Game;
-import it.xpug.frameworkless.hangman.web.toolkit.ClientError;
+import it.xpug.frameworkless.hangman.web.ClientError;
 
 import java.util.Optional;
 
 import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 
-public class HangmanController {
+public class HangmanService {
     private GameRepository gameRepository;
 
-    public HangmanController(GameRepository gameRepository) {
+    public HangmanService(GameRepository gameRepository) {
         this.gameRepository = gameRepository;
     }
 

@@ -1,13 +1,11 @@
-package it.xpug.frameworkless.hangman;
+package it.xpug.frameworkless.hangman.web.toolkit;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 
 import java.io.PrintWriter;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
-import static org.mockito.Mockito.*;
 
 public class FakeHttpServletResponseTest {
     FakeHttpServletResponse response = new FakeHttpServletResponse();

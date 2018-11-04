@@ -1,4 +1,4 @@
-package it.xpug.frameworkless.hangman;
+package it.xpug.frameworkless.hangman.web.toolkit;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
