@@ -13,8 +13,6 @@ public class HangmanController {
         this.gameRepository = gameRepository;
     }
 
-//    @RequestMapping(path = "/hangman/game", method = RequestMethod.POST)
-//    @ResponseStatus(HttpStatus.CREATED)
     public GameResponse createNewGame(String word) {
         Game newGame = (null == word)
                 ? gameRepository.createNewGame()

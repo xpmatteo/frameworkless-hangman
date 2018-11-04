@@ -1,4 +1,4 @@
-package it.xpug.hangman.web.toolkit;
+package it.xpug.frameworkless.hangman.web.toolkit;
 
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;

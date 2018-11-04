@@ -1,7 +1,7 @@
 package it.xpug.frameworkless.hangman;
 
 
-import it.xpug.hangman.web.toolkit.ReusableJettyApp;
+import it.xpug.frameworkless.hangman.web.toolkit.ReusableJettyApp;
 
 public class Main {
 
