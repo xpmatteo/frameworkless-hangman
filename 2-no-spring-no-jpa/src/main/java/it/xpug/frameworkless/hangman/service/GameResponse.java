@@ -4,13 +4,17 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import it.xpug.frameworkless.hangman.domain.Game;
 import it.xpug.frameworkless.hangman.domain.Prisoner;
 import it.xpug.frameworkless.hangman.util.ToHexSerializer;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Set;
 
 @Getter
 @Setter
+@ToString
+@EqualsAndHashCode
 public class GameResponse {
     @JsonSerialize(using= ToHexSerializer.class)
     private long gameId;
