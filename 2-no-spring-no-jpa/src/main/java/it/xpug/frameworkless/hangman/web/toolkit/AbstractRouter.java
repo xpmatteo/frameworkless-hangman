@@ -8,11 +8,18 @@ import java.util.regex.Pattern;
 
 @Slf4j
 public abstract class AbstractRouter {
+    protected final WebRequest webRequest;
+    protected final WebResponse webResponse;
     private Matcher matcher;
 
-    public void route(WebRequest webRequest, WebResponse webResponse) throws IOException {
+    protected AbstractRouter(WebRequest webRequest, WebResponse webResponse) {
+        this.webRequest = webRequest;
+        this.webResponse = webResponse;
+    }
+
+    public void route() throws IOException {
         try {
-            doRoute(webRequest, webResponse);
+            doRoute();
         } catch (ClientError e) {
             webResponse.clientError(e);
         } catch (Exception e) {
@@ -21,25 +28,25 @@ public abstract class AbstractRouter {
         }
     }
 
-    protected abstract void doRoute(WebRequest webRequest, WebResponse webResponse) throws IOException;
+    protected abstract void doRoute() throws IOException;
 
     protected String pathParameter(int group) {
         return matcher.group(group);
     }
 
-    protected boolean get(WebRequest webRequest, String pathTemplate) {
+    protected boolean get(String pathTemplate) {
         if (webRequest.getMethod() != HttpMethod.GET)
             return false;
-        return match(webRequest, pathTemplate);
+        return match(pathTemplate);
     }
 
-    protected boolean post(WebRequest webRequest, String pathTemplate) {
+    protected boolean post(String pathTemplate) {
         if (webRequest.getMethod() != HttpMethod.POST)
             return false;
-        return match(webRequest, pathTemplate);
+        return match(pathTemplate);
     }
 
-    private boolean match(WebRequest webRequest, String pathTemplate) {
+    private boolean match(String pathTemplate) {
         matcher = Pattern.compile(pathTemplate).matcher(webRequest.getPath());
         return matcher.matches();
     }

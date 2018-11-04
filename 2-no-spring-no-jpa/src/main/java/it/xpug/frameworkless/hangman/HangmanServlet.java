@@ -19,8 +19,10 @@ public class HangmanServlet extends HttpServlet {
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         GameRepository gameRepository = new GameRepository(new RandomGameIdGenerator(), new ProductionDataSource());
         HangmanController hangmanController = new HangmanController(gameRepository);
-        HangmanRouter hangmanRouter = new HangmanRouter(hangmanController);
+        WebRequest webRequest = new WebRequest(request);
+        WebResponse webResponse = new WebResponse(response);
+        HangmanRouter hangmanRouter = new HangmanRouter(webRequest, webResponse, hangmanController);
 
-        hangmanRouter.route(new WebRequest(request), new WebResponse(response));
+        hangmanRouter.route();
     }
 }

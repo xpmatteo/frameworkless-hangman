@@ -20,7 +20,7 @@ public class HangmanRouterTest {
     private WebResponse webResponse = mock(WebResponse.class);
     private GameResponse aGameResponse = GameResponse.from(new Game(0x77L));
 
-    private HangmanRouter hangmanRouter = new HangmanRouter(hangmanController);
+    private HangmanRouter hangmanRouter = new HangmanRouter(webRequest, webResponse, hangmanController);
     private RuntimeException anException = new RuntimeException("abababa");
 
     @Test
@@ -28,7 +28,7 @@ public class HangmanRouterTest {
         post("/hangman/game", "word", Optional.empty());
         when(hangmanController.createNewGame(null)).thenReturn(aGameResponse);
 
-        hangmanRouter.route(webRequest, webResponse);
+        hangmanRouter.route();
 
         verify(webResponse).respond(201, aGameResponse);
     }
@@ -38,7 +38,7 @@ public class HangmanRouterTest {
         post("/hangman/game", "word", Optional.of("foobar"));
         when(hangmanController.createNewGame("foobar")).thenReturn(aGameResponse);
 
-        hangmanRouter.route(webRequest, webResponse);
+        hangmanRouter.route();
 
         verify(webResponse).respond(201, aGameResponse);
     }
@@ -48,7 +48,7 @@ public class HangmanRouterTest {
         get("/hangman/game/abc123");
         when(hangmanController.findGame("abc123")).thenReturn(aGameResponse);
 
-        hangmanRouter.route(webRequest, webResponse);
+        hangmanRouter.route();
 
         verify(webResponse).respond(200, aGameResponse);
     }
@@ -58,7 +58,7 @@ public class HangmanRouterTest {
         get("/hangman/game/567def");
         when(hangmanController.findGame("567def")).thenThrow(anException);
 
-        hangmanRouter.route(webRequest, webResponse);
+        hangmanRouter.route();
 
         verify(webResponse).serverError(anException);
     }
@@ -67,7 +67,7 @@ public class HangmanRouterTest {
     public void pathNotFound() throws Exception {
         get("/foobar");
 
-        hangmanRouter.route(webRequest, webResponse);
+        hangmanRouter.route();
 
         verify(webResponse).clientError(new NotFoundException("/foobar"));
     }
@@ -77,7 +77,7 @@ public class HangmanRouterTest {
         post("/hangman/game/123/guesses", "guess", Optional.of("x"));
         when(hangmanController.guess("123", Optional.of("x"))).thenReturn(aGameResponse);
 
-        hangmanRouter.route(webRequest, webResponse);
+        hangmanRouter.route();
 
         verify(webResponse).respond(200, aGameResponse);
     }

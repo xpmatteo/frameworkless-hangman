@@ -15,27 +15,26 @@ import static javax.servlet.http.HttpServletResponse.SC_OK;
 
 @Slf4j
 public class HangmanRouter extends AbstractRouter {
-
     private final HangmanController hangmanController;
 
-    public HangmanRouter(HangmanController hangmanController) {
+    public HangmanRouter(WebRequest webRequest, WebResponse webResponse, HangmanController hangmanController) {
+        super(webRequest, webResponse);
         this.hangmanController = hangmanController;
     }
 
-    protected void doRoute(WebRequest webRequest, WebResponse webResponse) throws IOException {
-
-        if (post(webRequest, "/hangman/game/([a-f0-9]+)/guesses")) {
+    protected void doRoute() throws IOException {
+        if (post("/hangman/game/([a-f0-9]+)/guesses")) {
             GameResponse gameResponse = hangmanController.guess(pathParameter(1), webRequest.getParameter("guess"));
             webResponse.respond(SC_OK, gameResponse);
             return;
         }
 
-        if (get(webRequest, "/hangman/game/([a-f0-9]+)")) {
+        if (get("/hangman/game/([a-f0-9]+)")) {
             webResponse.respond(SC_OK, hangmanController.findGame(pathParameter(1)));
             return;
         }
 
-        if (post(webRequest, "/hangman/game")) {
+        if (post("/hangman/game")) {
             Optional<String> word = webRequest.getParameter("word");
 
             GameResponse gameResponse =
