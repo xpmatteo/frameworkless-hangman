@@ -21,22 +21,30 @@ public class WebResponse {
     }
 
     public void error(Exception exception) throws IOException {
-        Object body = new ExceptionBody("Internal server error", 500, exception.getClass().getName());
-        objectMapper.writeValue(httpServletResponse.getWriter(), body);
-        httpServletResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        httpServletResponse.setContentType("application/json");
+        if (exception instanceof ClientError) {
+            ClientError clientError = (ClientError) exception;
+            respond(clientError.getStatus(), new ExceptionBody(clientError));
+        } else {
+            respond(500, new ExceptionBody(exception));
+        }
     }
 
     @Getter
     static class ExceptionBody {
-        String exception;
-        String message;
-        Integer status;
+        final String exception;
+        final String message;
+        final Integer status;
 
-        public ExceptionBody(String message, Integer status, String exception) {
-            this.message = message;
-            this.status = status;
-            this.exception = exception;
+        public ExceptionBody(ClientError clientError) {
+            this.exception = clientError.getClass().getName();
+            this.message = clientError.getMessage();
+            this.status = clientError.getStatus();
+        }
+
+        public ExceptionBody(Exception exception) {
+            this.exception = exception.getClass().getName();
+            this.message = "Internal server error";
+            this.status = 500;
         }
     }
 }

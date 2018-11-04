@@ -57,6 +57,19 @@ public class WebResponseTest {
         assertThat(httpServletResponse.getBodyAsString(), is(expectedBody));
     }
 
+    @Test
+    public void respondWithClientError() throws Exception {
+        webResponse.error(new ClientError(400, "you got something wrong"));
+
+        assertThat(httpServletResponse.getStatus(), is(400));
+        assertThat(httpServletResponse.getContentType(), is("application/json"));
+        String expectedBody = "{" +
+                "\"exception\":\"it.xpug.frameworkless.hangman.web.ClientError\"," +
+                "\"message\":\"you got something wrong\"," +
+                "\"status\":400" +
+                "}";
+        assertThat(httpServletResponse.getBodyAsString(), is(expectedBody));
+    }
 
     private String anyBody() {
         return "body";
