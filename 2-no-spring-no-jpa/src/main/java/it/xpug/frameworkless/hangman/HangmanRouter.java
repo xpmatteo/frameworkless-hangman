@@ -18,7 +18,7 @@ public class HangmanRouter {
         this.hangmanController = hangmanController;
     }
 
-    public void route(WebRequest webRequest, WebResponse webResponse) {
+    public void route(WebRequest webRequest, WebResponse webResponse) throws IOException {
         try {
             doRoute(webRequest, webResponse);
         } catch (Exception e) {

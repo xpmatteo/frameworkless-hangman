@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
-import static org.mockito.Mockito.*;
 
 public class WebResponseTest {
 
@@ -20,29 +19,44 @@ public class WebResponseTest {
         }
     }
 
-    FakeHttpServletResponse fakeHttpServletResponse = new FakeHttpServletResponse();
-    WebResponse webResponse = new WebResponse(fakeHttpServletResponse);
+    FakeHttpServletResponse httpServletResponse = new FakeHttpServletResponse();
+    WebResponse webResponse = new WebResponse(httpServletResponse);
 
     @Test
     public void respondWithObject_serializesBodyWithJson() throws Exception {
         webResponse.respond(anyStatus(), new SampleObject("FOO", 123));
 
-        assertThat(fakeHttpServletResponse.getBodyAsString(), is("{\"foo\":\"FOO\",\"bar\":123}"));
+        assertThat(httpServletResponse.getBodyAsString(), is("{\"foo\":\"FOO\",\"bar\":123}"));
     }
 
     @Test
     public void respondWithObject_savesStatusCode() throws Exception {
         webResponse.respond(201, anyBody());
 
-        assertThat(fakeHttpServletResponse.getStatus(), is(201));
+        assertThat(httpServletResponse.getStatus(), is(201));
     }
 
     @Test
     public void respondWithObject_setsContentType() throws Exception {
         webResponse.respond(anyStatus(), anyBody());
 
-        assertThat(fakeHttpServletResponse.getHeader("Content-Type"), is("application/json"));
+        assertThat(httpServletResponse.getHeader("Content-Type"), is("application/json"));
     }
+
+    @Test
+    public void respondWithOrdinaryException() throws Exception {
+        webResponse.error(new RuntimeException("foobar"));
+
+        assertThat(httpServletResponse.getStatus(), is(500));
+        assertThat(httpServletResponse.getContentType(), is("application/json"));
+        String expectedBody = "{" +
+                "\"exception\":\"java.lang.RuntimeException\"," +
+                "\"message\":\"Internal server error\"," +
+                "\"status\":500" +
+                "}";
+        assertThat(httpServletResponse.getBodyAsString(), is(expectedBody));
+    }
+
 
     private String anyBody() {
         return "body";
