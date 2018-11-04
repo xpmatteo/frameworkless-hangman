@@ -7,12 +7,15 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class FakeHttpServletResponse extends EmptyHttpServletResponse {
 
     private int status;
-    private StringWriter writer;
+    private StringWriter writer = new StringWriter();
+    private Map<String, String> headers = new HashMap<>();
 
     @Override
     public void setStatus(int status) {
@@ -26,12 +29,31 @@ public class FakeHttpServletResponse extends EmptyHttpServletResponse {
 
     @Override
     public PrintWriter getWriter() throws IOException {
-        writer = new StringWriter();
         return new PrintWriter(writer);
     }
 
     public String getBodyAsString() {
         return writer.getBuffer().toString();
+    }
+
+    @Override
+    public void addHeader(String name, String value) {
+        this.headers.put(name.toLowerCase(), value);
+    }
+
+    @Override
+    public String getHeader(String name) {
+        return headers.get(name.toLowerCase());
+    }
+
+    @Override
+    public void setContentType(String type) {
+        addHeader("content-type", type);
+    }
+
+    @Override
+    public String getContentType() {
+        return headers.get("content-type");
     }
 }
 

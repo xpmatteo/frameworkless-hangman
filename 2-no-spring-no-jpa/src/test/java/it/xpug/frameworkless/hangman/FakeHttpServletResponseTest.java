@@ -27,4 +27,20 @@ public class FakeHttpServletResponseTest {
 
         assertThat(response.getBodyAsString(), is("foo, bar, baz"));
     }
+
+    @Test
+    public void setsAndRememberHeaders() throws Exception {
+        response.addHeader("Foo", "bar");
+
+        assertThat(response.getHeader("fOO"), is("bar"));
+    }
+
+    @Test
+    public void setsAndRememberContentType() throws Exception {
+        response.setContentType("foo/bar");
+
+        assertThat(response.getHeader("content-type"), is("foo/bar"));
+        assertThat(response.getContentType(), is("foo/bar"));
+    }
+
 }
