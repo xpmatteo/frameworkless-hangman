@@ -1,6 +1,5 @@
 package it.xpug.frameworkless.hangman.web;
 
-import it.xpug.frameworkless.hangman.web.WebRequest;
 import org.junit.Test;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,14 +38,29 @@ public class WebRequestTest {
     }
 
     @Test
-    public void getParameter() throws Exception {
+    public void getOptionalParameter_found() throws Exception {
         when(httpServletRequest.getParameter("found")).thenReturn("here I am");
 
-        assertThat(webRequest.getParameter("found"), is(Optional.of("here I am")));
+        assertThat(webRequest.getOptionalParameter("found"), is(Optional.of("here I am")));
     }
 
     @Test
-    public void getParameter_notFound() throws Exception {
-        assertThat(webRequest.getParameter("non-existing"), is(Optional.empty()));
+    public void getOptionalParameter_notFound() throws Exception {
+        assertThat(webRequest.getOptionalParameter("non-existing"), is(Optional.empty()));
     }
+
+    @Test
+    public void getMandatoryParameter_found() throws Exception {
+        when(httpServletRequest.getParameter("x")).thenReturn("hello");
+
+        assertThat(webRequest.getMandatoryParameter("x"), is("hello"));
+    }
+
+    @Test(expected = BadRequestException.class)
+    public void getMandatoryParameter_notFound() throws Exception {
+        when(httpServletRequest.getParameter("y")).thenReturn(null);
+
+        webRequest.getMandatoryParameter("y");
+    }
+
 }

@@ -22,7 +22,14 @@ public class WebRequest {
         }
     }
 
-    public Optional<String> getParameter(String name) {
+    public Optional<String> getOptionalParameter(String name) {
         return Optional.ofNullable(httpServletRequest.getParameter(name));
+    }
+
+    public String getMandatoryParameter(String name) {
+        String value = httpServletRequest.getParameter(name);
+        if (null == value)
+            throw new BadRequestException(String.format("Parameter <%s> is mandatory", name));
+        return value;
     }
 }

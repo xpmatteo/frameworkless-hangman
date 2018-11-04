@@ -38,7 +38,7 @@ public class HangmanRouter {
 
     private void doRoute() throws IOException {
         if (post("/hangman/game/([a-f0-9]+)/guesses")) {
-            GameResponse gameResponse = hangmanService.guess(pathParameter(1), webRequest.getParameter("guess"));
+            GameResponse gameResponse = hangmanService.guess(pathParameter(1), webRequest.getMandatoryParameter("guess"));
             webResponse.respond(SC_OK, gameResponse);
             return;
         }
@@ -49,7 +49,7 @@ public class HangmanRouter {
         }
 
         if (post("/hangman/game")) {
-            Optional<String> word = webRequest.getParameter("word");
+            Optional<String> word = webRequest.getOptionalParameter("word");
 
             GameResponse gameResponse =
                     word.map(hangmanService::createNewGame)

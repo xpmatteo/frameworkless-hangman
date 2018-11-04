@@ -23,7 +23,7 @@ public class HangmanRouterTest {
 
     @Test
     public void createNewGame() throws Exception {
-        post("/hangman/game", "word", Optional.empty());
+        post("/hangman/game");
         when(hangmanService.createNewGame(null)).thenReturn(aGameResponse);
 
         hangmanRouter.route();
@@ -33,7 +33,7 @@ public class HangmanRouterTest {
 
     @Test
     public void createNewGameWithSpecifiedWord() throws Exception {
-        post("/hangman/game", "word", Optional.of("foobar"));
+        post("/hangman/game", "word", "foobar");
         when(hangmanService.createNewGame("foobar")).thenReturn(aGameResponse);
 
         hangmanRouter.route();
@@ -72,18 +72,25 @@ public class HangmanRouterTest {
 
     @Test
     public void guess() throws Exception {
-        post("/hangman/game/123/guesses", "guess", Optional.of("x"));
-        when(hangmanService.guess("123", Optional.of("x"))).thenReturn(aGameResponse);
+        post("/hangman/game/123/guesses", "guess", "x");
+        when(hangmanService.guess("123", "x")).thenReturn(aGameResponse);
 
         hangmanRouter.route();
 
         verify(webResponse).respond(200, aGameResponse);
     }
 
-    private void post(String path, String parameterName, Optional<String> parameterValue) {
+    private void post(String path, String parameterName, String parameterValue) {
         when(webRequest.getMethod()).thenReturn(POST);
         when(webRequest.getPath()).thenReturn(path);
-        when(webRequest.getParameter(parameterName)).thenReturn(parameterValue);
+        when(webRequest.getOptionalParameter(parameterName)).thenReturn(Optional.of(parameterValue));
+        when(webRequest.getMandatoryParameter(parameterName)).thenReturn(parameterValue);
+    }
+
+    private void post(String path) {
+        when(webRequest.getMethod()).thenReturn(POST);
+        when(webRequest.getPath()).thenReturn(path);
+        when(webRequest.getOptionalParameter(anyString())).thenReturn(Optional.empty());
     }
 
     private void get(String path) {

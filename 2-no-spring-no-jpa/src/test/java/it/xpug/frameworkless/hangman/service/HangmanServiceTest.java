@@ -63,7 +63,7 @@ public class HangmanServiceTest {
         Game foundGame = aGame("word");
         when(gameRepository.findGame(0x99L)).thenReturn(Optional.of(foundGame));
 
-        GameResponse gameResponse = hangmanService.guess("99", Optional.of("x"));
+        GameResponse gameResponse = hangmanService.guess("99", "x");
 
         assertThat(gameResponse.getHits(), is(setOf()));
         assertThat(gameResponse.getMisses(), is(setOf("x")));

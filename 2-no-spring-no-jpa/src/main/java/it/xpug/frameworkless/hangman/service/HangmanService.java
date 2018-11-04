@@ -26,8 +26,7 @@ public class HangmanService {
                 .orElseThrow(() -> new GameNotFoundException(gameId));
     }
 
-    public GameResponse guess(String gameId, Optional<String> maybeGuess) {
-        String guess = maybeGuess.orElseThrow(MissingGuessException::new);
+    public GameResponse guess(String gameId, String guess) {
         if (guess.length() != 1)
             throw new InvalidGuessException(guess);
         Game game = gameRepository.findGame(Long.parseLong(gameId, 16))
