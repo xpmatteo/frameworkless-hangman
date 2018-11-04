@@ -3,8 +3,7 @@ jdk:
   - oraclejdk8
 before_script:
   - chmod +x */gradlew
+install: true
 script:
-  - 0-spring-jpa/gradlew test
-  - 1-spring-without-jpa/gradlew test
-  - 2-no-spring-no-jpa/gradlew test
+  - script/ci.sh
 
