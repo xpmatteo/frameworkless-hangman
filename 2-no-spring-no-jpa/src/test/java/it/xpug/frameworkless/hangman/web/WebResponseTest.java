@@ -45,7 +45,7 @@ public class WebResponseTest {
 
     @Test
     public void respondWithOrdinaryException() throws Exception {
-        webResponse.error(new RuntimeException("foobar"));
+        webResponse.serverError(new RuntimeException("foobar"));
 
         assertThat(httpServletResponse.getStatus(), is(500));
         assertThat(httpServletResponse.getContentType(), is("application/json"));
@@ -59,7 +59,7 @@ public class WebResponseTest {
 
     @Test
     public void respondWithClientError() throws Exception {
-        webResponse.error(new ClientError(400, "you got something wrong"));
+        webResponse.clientError(new ClientError(400, "you got something wrong"));
 
         assertThat(httpServletResponse.getStatus(), is(400));
         assertThat(httpServletResponse.getContentType(), is("application/json"));

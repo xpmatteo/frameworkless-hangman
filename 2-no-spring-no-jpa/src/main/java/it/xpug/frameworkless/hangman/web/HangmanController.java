@@ -3,6 +3,9 @@ package it.xpug.frameworkless.hangman.web;
 import it.xpug.frameworkless.hangman.db.GameRepository;
 import it.xpug.frameworkless.hangman.domain.Game;
 
+import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
+import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
+
 public class HangmanController {
     private GameRepository gameRepository;
 
@@ -38,17 +41,15 @@ public class HangmanController {
         return GameResponse.from(game);
     }
 
-//    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
-    private class InvalidGuessException extends RuntimeException {
+    private class InvalidGuessException extends ClientError {
         public InvalidGuessException(String guess) {
-            super(String.format("Guess '%s' invalid: must be a single letter", guess));
+            super(SC_BAD_REQUEST, String.format("Guess '%s' invalid: must be a single letter", guess));
         }
     }
 
-//    @ResponseStatus(code = HttpStatus.NOT_FOUND)
-    private class GameNotFoundException extends RuntimeException {
+    private class GameNotFoundException extends ClientError {
         public GameNotFoundException(String gameId) {
-            super(String.format("Game with id '%s' not found", gameId));
+            super(SC_NOT_FOUND, String.format("Game with id '%s' not found", gameId));
         }
     }
 }

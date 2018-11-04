@@ -1,6 +1,7 @@
 package it.xpug.frameworkless.hangman;
 
 import it.xpug.frameworkless.hangman.web.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -10,6 +11,7 @@ import java.util.regex.Pattern;
 import static javax.servlet.http.HttpServletResponse.SC_CREATED;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
 
+@Slf4j
 public class HangmanRouter {
 
     private final HangmanController hangmanController;
@@ -21,8 +23,11 @@ public class HangmanRouter {
     public void route(WebRequest webRequest, WebResponse webResponse) throws IOException {
         try {
             doRoute(webRequest, webResponse);
+        } catch (ClientError e) {
+            webResponse.clientError(e);
         } catch (Exception e) {
-            webResponse.error(e);
+            log.error("Internal server error", e);
+            webResponse.serverError(e);
         }
     }
 

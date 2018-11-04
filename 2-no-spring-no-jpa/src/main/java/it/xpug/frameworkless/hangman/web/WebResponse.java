@@ -15,18 +15,17 @@ public class WebResponse {
     }
 
     public void respond(int statusCode, Object body) throws IOException {
-        objectMapper.writeValue(httpServletResponse.getWriter(), body);
         httpServletResponse.setStatus(statusCode);
         httpServletResponse.setContentType("application/json");
+        objectMapper.writeValue(httpServletResponse.getWriter(), body);
     }
 
-    public void error(Exception exception) throws IOException {
-        if (exception instanceof ClientError) {
-            ClientError clientError = (ClientError) exception;
-            respond(clientError.getStatus(), new ExceptionBody(clientError));
-        } else {
-            respond(500, new ExceptionBody(exception));
-        }
+    public void clientError(ClientError clientError) throws IOException {
+        respond(clientError.getStatus(), new ExceptionBody(clientError));
+    }
+
+    public void serverError(Exception exception) throws IOException {
+        respond(500, new ExceptionBody(exception));
     }
 
     @Getter
