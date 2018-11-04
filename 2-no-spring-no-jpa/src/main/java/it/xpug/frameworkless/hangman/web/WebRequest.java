@@ -2,9 +2,12 @@ package it.xpug.frameworkless.hangman.web;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class WebRequest {
     private final HttpServletRequest httpServletRequest;
+    private Matcher matcher;
 
     public WebRequest(HttpServletRequest httpServletRequest) {
         this.httpServletRequest = httpServletRequest;
@@ -32,4 +35,26 @@ public class WebRequest {
             throw new BadRequestException(String.format("Parameter <%s> is mandatory", name));
         return value;
     }
+
+    public boolean isGet(String pathTemplate) {
+        if (getMethod() != HttpMethod.GET)
+            return false;
+        return match(pathTemplate);
+    }
+
+    public boolean isPost(String pathTemplate) {
+        if (getMethod() != HttpMethod.POST)
+            return false;
+        return match(pathTemplate);
+    }
+
+    public String getPathParameter(int group) {
+        return matcher.group(group);
+    }
+
+    private boolean match(String pathTemplate) {
+        matcher = Pattern.compile(pathTemplate).matcher(getPath());
+        return matcher.matches();
+    }
+
 }

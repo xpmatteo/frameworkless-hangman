@@ -5,19 +5,21 @@ import it.xpug.frameworkless.hangman.service.HangmanService;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.util.Optional;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static javax.servlet.http.HttpServletResponse.SC_CREATED;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
 
+/*
+    The purpose of this object is to
+     - transform a generic WebRequest into a specific call to a method of the Service
+     - transform the response from the Service into an appropriate WebResponse
+ */
 @Slf4j
 public class HangmanRouter {
     private final WebRequest webRequest;
     private final WebResponse webResponse;
     private final HangmanService hangmanService;
-    private Matcher matcher;
 
     public HangmanRouter(WebRequest webRequest, WebResponse webResponse, HangmanService hangmanService) {
         this.webRequest = webRequest;
@@ -37,49 +39,21 @@ public class HangmanRouter {
     }
 
     private void doRoute() throws IOException {
-        if (post("/hangman/game/([a-f0-9]+)/guesses")) {
-            GameResponse gameResponse = hangmanService.guess(pathParameter(1), webRequest.getMandatoryParameter("guess"));
+        if (webRequest.isPost("/hangman/game/([a-f0-9]+)/guesses")) {
+            String gameId = webRequest.getPathParameter(1);
+            String guess = webRequest.getMandatoryParameter("guess");
+            GameResponse gameResponse = hangmanService.guess(gameId, guess);
             webResponse.respond(SC_OK, gameResponse);
-            return;
-        }
 
-        if (get("/hangman/game/([a-f0-9]+)")) {
-            webResponse.respond(SC_OK, hangmanService.findGame(pathParameter(1)));
-            return;
-        }
+        } else if (webRequest.isGet("/hangman/game/([a-f0-9]+)")) {
+            webResponse.respond(SC_OK, hangmanService.findGame(webRequest.getPathParameter(1)));
 
-        if (post("/hangman/game")) {
-            Optional<String> word = webRequest.getOptionalParameter("word");
-
-            GameResponse gameResponse =
-                    word.map(hangmanService::createNewGame)
-                            .orElseGet(() -> hangmanService.createNewGame(null));
-
+        } else if (webRequest.isPost("/hangman/game")) {
+            GameResponse gameResponse = hangmanService.createNewGame(webRequest.getOptionalParameter("word"));
             webResponse.respond(SC_CREATED, gameResponse);
-            return;
+
+        } else {
+            throw new NotFoundException(webRequest.getPath());
         }
-
-        throw new NotFoundException(webRequest.getPath());
-    }
-
-    private String pathParameter(int group) {
-        return matcher.group(group);
-    }
-
-    private boolean get(String pathTemplate) {
-        if (webRequest.getMethod() != HttpMethod.GET)
-            return false;
-        return match(pathTemplate);
-    }
-
-    private boolean post(String pathTemplate) {
-        if (webRequest.getMethod() != HttpMethod.POST)
-            return false;
-        return match(pathTemplate);
-    }
-
-    private boolean match(String pathTemplate) {
-        matcher = Pattern.compile(pathTemplate).matcher(webRequest.getPath());
-        return matcher.matches();
     }
 }

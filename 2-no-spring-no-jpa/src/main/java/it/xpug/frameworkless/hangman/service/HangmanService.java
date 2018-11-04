@@ -12,10 +12,10 @@ public class HangmanService {
         this.gameRepository = gameRepository;
     }
 
-    public GameResponse createNewGame(String word) {
-        Game newGame = (null == word)
-                ? gameRepository.createNewGame()
-                : gameRepository.createNewGame(word);
+    public GameResponse createNewGame(Optional<String> optionalWord) {
+        Game newGame = optionalWord
+                .map(word -> gameRepository.createNewGame(word))
+                .orElseGet(() -> gameRepository.createNewGame());
         return GameResponse.from(newGame);
     }
 

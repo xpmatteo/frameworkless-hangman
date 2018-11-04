@@ -5,16 +5,16 @@ import it.xpug.frameworkless.hangman.service.GameResponse;
 import it.xpug.frameworkless.hangman.service.HangmanService;
 import org.junit.Test;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
-import static it.xpug.frameworkless.hangman.web.HttpMethod.GET;
-import static it.xpug.frameworkless.hangman.web.HttpMethod.POST;
 import static org.mockito.Mockito.*;
 
 public class HangmanRouterTest {
 
     private HangmanService hangmanService = mock(HangmanService.class);
-    private WebRequest webRequest = mock(WebRequest.class);
+    private HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
+    private WebRequest webRequest = new WebRequest(httpServletRequest);
     private WebResponse webResponse = mock(WebResponse.class);
     private GameResponse aGameResponse = GameResponse.from(new Game(0x77L));
 
@@ -24,7 +24,7 @@ public class HangmanRouterTest {
     @Test
     public void createNewGame() throws Exception {
         post("/hangman/game");
-        when(hangmanService.createNewGame(null)).thenReturn(aGameResponse);
+        when(hangmanService.createNewGame(Optional.empty())).thenReturn(aGameResponse);
 
         hangmanRouter.route();
 
@@ -34,7 +34,7 @@ public class HangmanRouterTest {
     @Test
     public void createNewGameWithSpecifiedWord() throws Exception {
         post("/hangman/game", "word", "foobar");
-        when(hangmanService.createNewGame("foobar")).thenReturn(aGameResponse);
+        when(hangmanService.createNewGame(Optional.of("foobar"))).thenReturn(aGameResponse);
 
         hangmanRouter.route();
 
@@ -81,21 +81,19 @@ public class HangmanRouterTest {
     }
 
     private void post(String path, String parameterName, String parameterValue) {
-        when(webRequest.getMethod()).thenReturn(POST);
-        when(webRequest.getPath()).thenReturn(path);
-        when(webRequest.getOptionalParameter(parameterName)).thenReturn(Optional.of(parameterValue));
-        when(webRequest.getMandatoryParameter(parameterName)).thenReturn(parameterValue);
+        when(httpServletRequest.getMethod()).thenReturn("POST");
+        when(httpServletRequest.getRequestURI()).thenReturn(path);
+        when(httpServletRequest.getParameter(parameterName)).thenReturn(parameterValue);
     }
 
     private void post(String path) {
-        when(webRequest.getMethod()).thenReturn(POST);
-        when(webRequest.getPath()).thenReturn(path);
-        when(webRequest.getOptionalParameter(anyString())).thenReturn(Optional.empty());
+        when(httpServletRequest.getMethod()).thenReturn("POST");
+        when(httpServletRequest.getRequestURI()).thenReturn(path);
     }
 
     private void get(String path) {
-        when(webRequest.getMethod()).thenReturn(GET);
-        when(webRequest.getPath()).thenReturn(path);
+        when(httpServletRequest.getMethod()).thenReturn("GET");
+        when(httpServletRequest.getRequestURI()).thenReturn(path);
     }
 
 }

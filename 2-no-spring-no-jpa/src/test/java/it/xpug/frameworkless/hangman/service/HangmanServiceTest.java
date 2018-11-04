@@ -26,7 +26,7 @@ public class HangmanServiceTest {
         Game newGame = aGame();
         when(gameRepository.createNewGame()).thenReturn(newGame);
 
-        GameResponse gameResponse = hangmanService.createNewGame(null);
+        GameResponse gameResponse = hangmanService.createNewGame(Optional.empty());
 
         assertThat(gameResponse, is(GameResponse.from(newGame)));
     }
@@ -36,7 +36,7 @@ public class HangmanServiceTest {
         Game newGame = aGame();
         when(gameRepository.createNewGame("WORD")).thenReturn(newGame);
 
-        GameResponse gameResponse = hangmanService.createNewGame("WORD");
+        GameResponse gameResponse = hangmanService.createNewGame(Optional.of("WORD"));
 
         assertThat(gameResponse, is(GameResponse.from(newGame)));
     }
