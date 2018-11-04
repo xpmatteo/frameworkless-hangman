@@ -3,7 +3,9 @@
 set -e
 cd $(dirname $0)/..
 
-./gradlew shadowJar -x test
+if [ "$1" != "--no-gradle" ]; then
+  ./gradlew shadowJar -x test
+fi
 
 exec java \
   -XX:TieredStopAtLevel=1 -noverify \
