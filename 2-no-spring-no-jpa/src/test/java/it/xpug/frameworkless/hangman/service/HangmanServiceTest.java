@@ -59,7 +59,7 @@ public class HangmanServiceTest {
     }
 
     @Test
-    public void guess() throws Exception {
+    public void guess_ok() throws Exception {
         Game foundGame = aGame("word");
         when(gameRepository.findGame(0x99L)).thenReturn(Optional.of(foundGame));
 
@@ -67,6 +67,18 @@ public class HangmanServiceTest {
 
         assertThat(gameResponse.getHits(), is(setOf()));
         assertThat(gameResponse.getMisses(), is(setOf("x")));
+    }
+
+    @Test(expected = InvalidGuessException.class)
+    public void guess_parameterTooBig() throws Exception {
+        hangmanService.guess("99", "ab");
+    }
+
+    @Test(expected = GameNotFoundException.class)
+    public void guess_notFound() throws Exception {
+        when(gameRepository.findGame(anyLong())).thenReturn(Optional.empty());
+
+        hangmanService.guess("99", "a");
     }
 
     private Set<String> setOf(String ... strings) {
