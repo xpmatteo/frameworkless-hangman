@@ -43,7 +43,7 @@ public class HangmanRouter {
             webResponse.respond(SC_CREATED, gameResponse);
         }
 
-        throw new NotFoundExeption(webRequest.getPath());
+        throw new NotFoundException(webRequest.getPath());
     }
 
 }

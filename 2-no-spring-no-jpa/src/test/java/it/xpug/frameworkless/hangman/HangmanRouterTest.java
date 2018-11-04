@@ -66,7 +66,7 @@ public class HangmanRouterTest {
 
         hangmanRouter.route(webRequest, webResponse);
 
-        verify(webResponse).error(new NotFoundExeption("/foobar"));
+        verify(webResponse).error(new NotFoundException("/foobar"));
     }
 
     private void post(String path, String parameterName, Optional<String> parameterValue) {
