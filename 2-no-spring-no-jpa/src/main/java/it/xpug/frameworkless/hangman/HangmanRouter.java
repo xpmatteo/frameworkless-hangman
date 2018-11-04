@@ -15,6 +15,7 @@ import static javax.servlet.http.HttpServletResponse.SC_OK;
 public class HangmanRouter {
 
     private final HangmanController hangmanController;
+    private Matcher matcher;
 
     public HangmanRouter(HangmanController hangmanController) {
         this.hangmanController = hangmanController;
@@ -32,13 +33,19 @@ public class HangmanRouter {
     }
 
     private void doRoute(WebRequest webRequest, WebResponse webResponse) throws IOException {
-        Matcher matcher = Pattern.compile("/hangman/game/([a-f0-9]+)").matcher(webRequest.getPath());
-        if (matcher.matches()) {
-            webResponse.respond(SC_OK, hangmanController.findGame(matcher.group(1)));
+
+        if (post(webRequest, "/hangman/game/([a-f0-9]+)/guesses")) {
+            GameResponse gameResponse = hangmanController.guess(pathParameter(1), webRequest.getParameter("guess"));
+            webResponse.respond(SC_OK, gameResponse);
             return;
         }
 
-        if (webRequest.getPath().equals("/hangman/game")) {
+        if (get(webRequest, "/hangman/game/([a-f0-9]+)")) {
+            webResponse.respond(SC_OK, hangmanController.findGame(pathParameter(1)));
+            return;
+        }
+
+        if (post(webRequest, "/hangman/game")) {
             Optional<String> word = webRequest.getParameter("word");
 
             GameResponse gameResponse =
@@ -46,9 +53,31 @@ public class HangmanRouter {
                             .orElseGet(() -> hangmanController.createNewGame(null));
 
             webResponse.respond(SC_CREATED, gameResponse);
+            return;
         }
 
         throw new NotFoundException(webRequest.getPath());
+    }
+
+    private String pathParameter(int group) {
+        return matcher.group(group);
+    }
+
+    private boolean get(WebRequest webRequest, String pathTemplate) {
+        if (webRequest.getMethod() != HttpMethod.GET)
+            return false;
+        return match(webRequest, pathTemplate);
+    }
+
+    private boolean post(WebRequest webRequest, String pathTemplate) {
+        if (webRequest.getMethod() != HttpMethod.POST)
+            return false;
+        return match(webRequest, pathTemplate);
+    }
+
+    private boolean match(WebRequest webRequest, String pathTemplate) {
+        matcher = Pattern.compile(pathTemplate).matcher(webRequest.getPath());
+        return matcher.matches();
     }
 
 }

@@ -69,6 +69,16 @@ public class HangmanRouterTest {
         verify(webResponse).clientError(new NotFoundException("/foobar"));
     }
 
+    @Test
+    public void guess() throws Exception {
+        post("/hangman/game/123/guesses", "guess", Optional.of("x"));
+        when(hangmanController.guess("123", Optional.of("x"))).thenReturn(aGameResponse);
+
+        hangmanRouter.route(webRequest, webResponse);
+
+        verify(webResponse).respond(200, aGameResponse);
+    }
+
     private void post(String path, String parameterName, Optional<String> parameterValue) {
         when(webRequest.getMethod()).thenReturn(POST);
         when(webRequest.getPath()).thenReturn(path);

@@ -3,6 +3,8 @@ package it.xpug.frameworkless.hangman.web;
 import it.xpug.frameworkless.hangman.db.GameRepository;
 import it.xpug.frameworkless.hangman.domain.Game;
 
+import java.util.Optional;
+
 import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 
@@ -20,7 +22,6 @@ public class HangmanController {
         return GameResponse.from(newGame);
     }
 
-//    @RequestMapping(path = "/hangman/game/{gameId}", method = RequestMethod.GET)
     public GameResponse findGame(String gameId) {
         long gameIdAsLong = Long.parseLong(gameId, 16);
         return gameRepository.findGame(gameIdAsLong)
@@ -28,8 +29,8 @@ public class HangmanController {
                 .orElseThrow(() -> new GameNotFoundException(gameId));
     }
 
-//    @RequestMapping(path = "/hangman/game/{gameId}/guesses", method = RequestMethod.POST)
-    public GameResponse guess(String gameId, String guess) {
+    public GameResponse guess(String gameId, Optional<String> maybeGuess) {
+        String guess = maybeGuess.orElseThrow(MissingGuessException::new);
         if (guess.length() != 1)
             throw new InvalidGuessException(guess);
         Game game = gameRepository.findGame(Long.parseLong(gameId, 16))
@@ -37,6 +38,12 @@ public class HangmanController {
         game.getPrisoner().guess(guess);
         gameRepository.update(game);
         return GameResponse.from(game);
+    }
+
+    private class MissingGuessException extends ClientError {
+        public MissingGuessException() {
+            super(SC_BAD_REQUEST, String.format("Guess parameter missing"));
+        }
     }
 
     private class InvalidGuessException extends ClientError {
