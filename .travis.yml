@@ -10,6 +10,8 @@ script:
   - script/ci.sh
 cache:
   directories:
-  - $HOME/.gradle
+  - $HOME/.gradle/wrapper
+  - $HOME/.gradle/caches
+  - $HOME/.gradle/native
 
 
