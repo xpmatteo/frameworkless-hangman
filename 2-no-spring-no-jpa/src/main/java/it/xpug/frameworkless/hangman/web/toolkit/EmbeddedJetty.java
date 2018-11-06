@@ -10,12 +10,12 @@ import org.eclipse.jetty.servlet.ServletHandler;
 import javax.servlet.http.HttpServlet;
 
 
-public class ReusableJettyApp {
+public class EmbeddedJetty {
 
     private Server server;
     private final Class<? extends HttpServlet> servletClass;
 
-    public ReusableJettyApp(Class<? extends HttpServlet> servlet) {
+    public EmbeddedJetty(Class<? extends HttpServlet> servlet) {
         this.servletClass = servlet;
     }
 

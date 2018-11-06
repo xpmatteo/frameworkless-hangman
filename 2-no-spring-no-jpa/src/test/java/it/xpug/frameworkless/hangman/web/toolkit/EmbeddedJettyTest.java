@@ -1,6 +1,6 @@
 package it.xpug.simplewebapp.jetty;
 
-import it.xpug.frameworkless.hangman.web.toolkit.ReusableJettyApp;
+import it.xpug.frameworkless.hangman.web.toolkit.EmbeddedJetty;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -18,9 +18,9 @@ import java.net.URL;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.junit.Assert.assertThat;
 
-public class ReusableJettyAppTest {
+public class EmbeddedJettyTest {
 
-	private static ReusableJettyApp app = new ReusableJettyApp(TestServlet.class);
+	private static EmbeddedJetty embeddedJetty = new EmbeddedJetty(TestServlet.class);
 	
 	public static class TestServlet extends HttpServlet {
 		@Override
@@ -41,12 +41,12 @@ public class ReusableJettyAppTest {
 
 	@BeforeClass
 	public static void setUp() throws Exception {
-		app.start(8123);
+		embeddedJetty.start(8123);
 	}
 
 	@AfterClass
 	public static void tearDown() throws Exception {
-		app.shutdown();
+		embeddedJetty.shutdown();
 	}
 
 	private String get(String path) throws IOException {

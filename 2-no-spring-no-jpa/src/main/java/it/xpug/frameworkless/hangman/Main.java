@@ -1,12 +1,12 @@
 package it.xpug.frameworkless.hangman;
 
 
-import it.xpug.frameworkless.hangman.web.toolkit.ReusableJettyApp;
+import it.xpug.frameworkless.hangman.web.toolkit.EmbeddedJetty;
 
 public class Main {
 
 	public static void main(String[] args) {
-		ReusableJettyApp app = new ReusableJettyApp(HangmanServlet.class);
-		app.start(8080);
+		EmbeddedJetty embeddedJetty = new EmbeddedJetty(HangmanServlet.class);
+		embeddedJetty.start(8080);
 	}
 }
