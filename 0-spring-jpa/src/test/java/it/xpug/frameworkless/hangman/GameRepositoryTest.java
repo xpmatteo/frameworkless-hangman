@@ -1,48 +1,47 @@
 package it.xpug.frameworkless.hangman;
 
-import com.mysql.cj.jdbc.MysqlDataSource;
 import it.xpug.frameworkless.hangman.db.GameRepository;
 import it.xpug.frameworkless.hangman.domain.Game;
 import it.xpug.frameworkless.hangman.domain.GameIdGenerator;
 import it.xpug.frameworkless.hangman.domain.Prisoner;
-import org.hibernate.jpa.HibernatePersistenceProvider;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
+
 import java.math.BigInteger;
 import java.util.Optional;
-import java.util.Properties;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@Transactional
+@TestPropertySource("classpath:application-test.properties")
 public class GameRepositoryTest {
 
-    EntityManager entityManager = createTestEntityManager();
+    @Autowired
+    EntityManager entityManager;
 
-    GameIdGenerator gameIdGenerator = mock(GameIdGenerator.class);
+    @MockBean
+    GameIdGenerator gameIdGenerator;
 
-    GameRepository gameRepository = new GameRepository(gameIdGenerator, entityManager);
-
-    EntityTransaction transaction;
+    @Autowired
+    GameRepository gameRepository;
 
     @Before
     public void setUp() {
-        transaction = entityManager.getTransaction();
-        transaction.begin();
         entityManager.createNativeQuery("delete from hangman_games").executeUpdate();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        transaction.commit();
     }
 
     @Test
@@ -53,18 +52,6 @@ public class GameRepositoryTest {
         Game game = gameRepository.createNewGame();
 
         assertThat(game.getGameId(), is(123L));
-        assertThat(gameCount(), is(1));
-    }
-
-    @Test
-    public void createNewGameWithGivenWord() throws Exception {
-        when(gameIdGenerator.generateGameId()).thenReturn(33L);
-        assertThat(gameCount(), is(0));
-
-        Game game = gameRepository.createNewGame("aha");
-
-        assertThat(game.getGameId(), is(33L));
-        assertThat(game.getPrisoner().getWord(), is("aha"));
         assertThat(gameCount(), is(1));
     }
 
@@ -111,28 +98,5 @@ public class GameRepositoryTest {
         return entityManager.createNativeQuery(sql).getSingleResult();
     }
 
-    // does not work!!!
-    // https://stackoverflow.com/a/26814642/164802
-    public EntityManager createTestEntityManager() {
-        MysqlDataSource dataSource = new MysqlDataSource();
-        dataSource.setUrl("jdbc:mysql://localhost:3306/hangman_test?serverTimezone=UTC");
-        dataSource.setUser("hangman");
-        dataSource.setPassword("hangman");
-
-        Properties hibernateProperties = new Properties();
-        hibernateProperties.put("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver");
-        hibernateProperties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-
-        final LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-        em.setDataSource(dataSource);
-        em.setPackagesToScan("it.xpug.frameworkless.hangman.domain");
-        em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        em.setJpaProperties(hibernateProperties);
-        em.setPersistenceUnitName("default");
-        em.setPersistenceProviderClass(HibernatePersistenceProvider.class);
-        em.afterPropertiesSet();
-
-        return em.getObject().createEntityManager();
-    }
 
 }
