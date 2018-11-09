@@ -10,18 +10,11 @@ import javax.persistence.Id;
 
 @Entity(name = "hangman_games")
 @NoArgsConstructor
+@Getter
 public class Game {
     @Id
-    @Getter
-    @Column(name = "game_id")
     private Long gameId;
 
-    @Override
-    public String toString() {
-        return "Game " + gameId;
-    }
-
-    @Getter
     private Prisoner prisoner;
 
     public Game(Long gameId) {
@@ -33,4 +26,8 @@ public class Game {
         this.prisoner = prisoner;
     }
 
+    @Override
+    public String toString() {
+        return "Game " + gameId;
+    }
 }

@@ -49,10 +49,10 @@ public class GameRepository {
                     connection,
                     sql,
                     game.getGameId(),
-                    get(prisoner, "word"),
-                    get(prisoner, "guessesRemaining"),
-                    convertCharSetToString((Set<String>) get(prisoner, "hits")),
-                    convertCharSetToString((Set<String>) get(prisoner, "misses"))
+                    prisoner.getWord(),
+                    prisoner.getGuessesRemaining(),
+                    convertCharSetToString(prisoner.getHits()),
+                    convertCharSetToString(prisoner.getMisses())
             );
         }
         return game;
@@ -71,10 +71,10 @@ public class GameRepository {
             new QueryRunner().execute(
                     connection,
                     sql,
-                    get(prisoner, "word"),
-                    get(prisoner, "guessesRemaining"),
-                    convertCharSetToString((Set<String>) get(prisoner, "hits")),
-                    convertCharSetToString((Set<String>) get(prisoner, "misses")),
+                    prisoner.getWord(),
+                    prisoner.getGuessesRemaining(),
+                    convertCharSetToString(prisoner.getHits()),
+                    convertCharSetToString(prisoner.getMisses()),
                     game.getGameId()
             );
         }
@@ -105,13 +105,6 @@ public class GameRepository {
         Field field = target.getClass().getDeclaredField(fieldName);
         field.setAccessible(true);
         field.set(target, value);
-    }
-
-    @SneakyThrows
-    private Object get(Object object, String fieldName) {
-        Field field = object.getClass().getDeclaredField(fieldName);
-        field.setAccessible(true);
-        return field.get(object);
     }
 
     private Set<String> convertStringToCharSet(String dbData) {

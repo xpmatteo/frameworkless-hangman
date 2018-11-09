@@ -17,9 +17,12 @@ import java.io.IOException;
 public class HangmanServlet extends HttpServlet {
 
     @Override
-    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        GameRepository gameRepository = new GameRepository(new RandomGameIdGenerator(), new ProductionDataSource());
+    protected void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        RandomGameIdGenerator gameIdGenerator = new RandomGameIdGenerator();
+        ProductionDataSource dataSource = new ProductionDataSource();
+        GameRepository gameRepository = new GameRepository(gameIdGenerator, dataSource);
         HangmanService hangmanService = new HangmanService(gameRepository);
+
         WebRequest webRequest = new WebRequest(request);
         WebResponse webResponse = new WebResponse(response);
         HangmanRouter hangmanRouter = new HangmanRouter(webRequest, webResponse, hangmanService);

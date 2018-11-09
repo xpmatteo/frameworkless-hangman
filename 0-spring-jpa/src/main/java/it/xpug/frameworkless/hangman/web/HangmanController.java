@@ -19,6 +19,16 @@ public class HangmanController {
         this.gameRepository = gameRepository;
     }
 
+    @RequestMapping(path = "/hangman/game/{gameId}/guesses", method = RequestMethod.POST)
+    public GameResponse guess(@PathVariable String gameId, @RequestParam String guess) {
+        if (guess.length() != 1)
+            throw new InvalidGuessException(guess);
+        Game game = gameRepository.findGame(Long.parseLong(gameId, 16))
+                .orElseThrow(() -> new GameNotFoundException(gameId));
+        game.getPrisoner().guess(guess);
+        return GameResponse.from(game);
+    }
+
     @RequestMapping(path = "/hangman/game", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public GameResponse createNewGame(@RequestParam(required = false) String word) {
@@ -34,16 +44,6 @@ public class HangmanController {
         return gameRepository.findGame(gameIdAsLong)
                 .map(GameResponse::from)
                 .orElseThrow(() -> new GameNotFoundException(gameId));
-    }
-
-    @RequestMapping(path = "/hangman/game/{gameId}/guesses", method = RequestMethod.POST)
-    public GameResponse guess(@PathVariable String gameId, @RequestParam String guess) {
-        if (guess.length() != 1)
-            throw new InvalidGuessException(guess);
-        Game game = gameRepository.findGame(Long.parseLong(gameId, 16))
-                .orElseThrow(() -> new GameNotFoundException(gameId));
-        game.getPrisoner().guess(guess);
-        return GameResponse.from(game);
     }
 
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)

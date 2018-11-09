@@ -21,14 +21,13 @@ public class Prisoner {
 	@Getter
 	private String word;
 
-	@Column(name = "guesses_remaining")
 	private int guessesRemaining = 18;
 
     @Convert(converter = SetConverter.class)
-	private Set<String> misses = new HashSet<String>();
+	private Set<String> misses = new HashSet<>();
 
     @Convert(converter = SetConverter.class)
-	private Set<String> hits = new HashSet<String>();
+	private Set<String> hits = new HashSet<>();
 
 	public Prisoner() {
 		this(new WordList().getRandomWord());
@@ -36,6 +35,18 @@ public class Prisoner {
 
 	public Prisoner(String word) {
 		this.word = word;
+	}
+
+	public void guess(String guess) {
+		if (guessesRemaining == 0) {
+			return;
+		}
+		this.guessesRemaining--;
+		if (word.contains(guess)) {
+			hits.add(guess);
+		} else {
+			misses.add(guess);
+		}
 	}
 
 	public Set<String> getMisses() {
@@ -69,18 +80,6 @@ public class Prisoner {
 
 	public int getGuessesRemaining() {
 		return guessesRemaining;
-	}
-
-	public void guess(String guess) {
-		if (guessesRemaining == 0) {
-			return;
-		}
-		this.guessesRemaining--;
-		if (word.contains(guess)) {
-			hits.add(guess);
-		} else {
-			misses.add(guess);
-		}
 	}
 
 }

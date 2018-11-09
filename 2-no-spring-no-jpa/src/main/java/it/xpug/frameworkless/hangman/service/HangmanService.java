@@ -35,5 +35,4 @@ public class HangmanService {
         gameRepository.update(game);
         return GameResponse.from(game);
     }
-
 }
