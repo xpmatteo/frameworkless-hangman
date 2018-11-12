@@ -1,7 +1,5 @@
 package it.xpug.frameworkless.hangman.db;
 
-import it.xpug.frameworkless.hangman.db.GameRepository;
-import it.xpug.frameworkless.hangman.db.TestDataSource;
 import it.xpug.frameworkless.hangman.domain.Game;
 import it.xpug.frameworkless.hangman.domain.GameIdGenerator;
 import it.xpug.frameworkless.hangman.domain.Prisoner;

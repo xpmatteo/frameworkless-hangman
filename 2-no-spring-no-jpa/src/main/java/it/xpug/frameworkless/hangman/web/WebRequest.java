@@ -17,14 +17,6 @@ public class WebRequest {
         return httpServletRequest.getRequestURI();
     }
 
-    public HttpMethod getMethod() {
-        try {
-            return HttpMethod.valueOf(httpServletRequest.getMethod().toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return HttpMethod.OTHER;
-        }
-    }
-
     public Optional<String> getOptionalParameter(String name) {
         return Optional.ofNullable(httpServletRequest.getParameter(name));
     }
@@ -34,6 +26,14 @@ public class WebRequest {
         if (null == value)
             throw new BadRequestException(String.format("Parameter <%s> is mandatory", name));
         return value;
+    }
+
+    public HttpMethod getMethod() {
+        try {
+            return HttpMethod.valueOf(httpServletRequest.getMethod().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return HttpMethod.OTHER;
+        }
     }
 
     public boolean isGet(String pathTemplate) {

@@ -1,14 +1,13 @@
 package it.xpug.frameworkless.hangman;
 
-import it.xpug.frameworkless.hangman.service.HangmanService;
 import it.xpug.frameworkless.hangman.db.GameRepository;
 import it.xpug.frameworkless.hangman.db.ProductionDataSource;
 import it.xpug.frameworkless.hangman.domain.RandomGameIdGenerator;
+import it.xpug.frameworkless.hangman.service.HangmanService;
 import it.xpug.frameworkless.hangman.web.HangmanRouter;
 import it.xpug.frameworkless.hangman.web.WebRequest;
 import it.xpug.frameworkless.hangman.web.WebResponse;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
