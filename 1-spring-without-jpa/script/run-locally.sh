@@ -8,5 +8,4 @@ if [ "$1" != "--no-gradle" ]; then
 fi
 
 exec java \
-  -XX:TieredStopAtLevel=1 -noverify \
   -jar "build/libs/hangman-0.0.1-SNAPSHOT.jar" $*
