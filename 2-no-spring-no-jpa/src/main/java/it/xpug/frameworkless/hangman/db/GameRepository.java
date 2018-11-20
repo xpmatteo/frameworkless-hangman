@@ -58,33 +58,17 @@ public class GameRepository {
     }
 
     @SneakyThrows
-    public void update(Game game) {
-        String sql = "update hangman_games set " +
-                "word = ?, " +
-                "guesses_remaining = ?, " +
-                "hits = ?, " +
-                "misses = ? " +
-                "where game_id = ? ";
-        try (Connection connection = dataSource.getConnection()) {
-            Prisoner prisoner = game.getPrisoner();
-            new QueryRunner().execute(
-                    connection,
-                    sql,
-                    prisoner.getWord(),
-                    prisoner.getGuessesRemaining(),
-                    convertCharSetToString(prisoner.getHits()),
-                    convertCharSetToString(prisoner.getMisses()),
-                    game.getGameId()
-            );
-        }
-    }
-
-    @SneakyThrows
     public Optional<Game> findGame(Long gameId) {
         try (Connection connection = dataSource.getConnection()) {
-            Optional<Game> game = loadGame(gameId, connection);
-//            List<Guess> guesses = loadGuesses(gameId, connection);
-            return game;
+            Optional<Game> maybeGame = loadGame(gameId, connection);
+            if (!maybeGame.isPresent())
+                return Optional.empty();
+            Game game = maybeGame.get();
+            List<Guess> guesses = loadGuesses(gameId, connection);
+            guesses.forEach(guess -> {
+                game.getPrisoner().guess(guess);
+            });
+            return Optional.of(game);
         }
     }
 
@@ -135,10 +119,11 @@ public class GameRepository {
 
     @SneakyThrows
     public void save(long gameId, Guess guess) {
-        String sql = "insert into guesses " +
-                "(game_id, letter) " +
-                "values" +
-                "(?, ?)";
+        String sql = "" +
+                "insert into guesses " +
+                " (game_id, letter) " +
+                " values " +
+                " (?, ?) ";
         try (Connection connection = dataSource.getConnection()) {
             new QueryRunner().execute(
                     connection,

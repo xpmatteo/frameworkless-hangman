@@ -35,7 +35,6 @@ public class HangmanService {
                 .orElseThrow(() -> new GameNotFoundException(gameIdAsString));
         Guess guess = new Guess(letter);
         game.getPrisoner().guess(guess);
-        gameRepository.update(game);
         gameRepository.save(gameId, guess);
         return GameResponse.from(game);
     }
