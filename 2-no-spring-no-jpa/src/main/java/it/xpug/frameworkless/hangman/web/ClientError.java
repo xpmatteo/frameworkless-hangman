@@ -1,6 +1,7 @@
 package it.xpug.frameworkless.hangman.web;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @Getter

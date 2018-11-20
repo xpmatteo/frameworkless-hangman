@@ -67,7 +67,7 @@ public class HangmanRouterTest {
 
         hangmanRouter.route();
 
-        verify(webResponse).clientError(new NotFoundException("/foobar"));
+        verify(webResponse).clientError(any(NotFoundException.class));
     }
 
     @Test
