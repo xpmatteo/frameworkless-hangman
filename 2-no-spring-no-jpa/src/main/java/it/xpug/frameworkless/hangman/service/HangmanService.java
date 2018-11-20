@@ -32,8 +32,10 @@ public class HangmanService {
             throw new InvalidGuessException(letter);
         Game game = gameRepository.findGame(Long.parseLong(gameId, 16))
                 .orElseThrow(() -> new GameNotFoundException(gameId));
-        game.getPrisoner().guess(new Guess(letter));
+        Guess guess = new Guess(letter);
+        game.getPrisoner().guess(guess);
         gameRepository.update(game);
+        gameRepository.save(guess);
         return GameResponse.from(game);
     }
 }

@@ -2,6 +2,7 @@ package it.xpug.frameworkless.hangman.db;
 
 import it.xpug.frameworkless.hangman.domain.Game;
 import it.xpug.frameworkless.hangman.domain.GameIdGenerator;
+import it.xpug.frameworkless.hangman.domain.Guess;
 import it.xpug.frameworkless.hangman.domain.Prisoner;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
@@ -85,15 +86,14 @@ public class GameRepositoryTest {
 
     @Test
     public void updateGame() throws Exception {
-        Game original = new Game(42L, new Prisoner("foobar"));
-        gameRepository.create(original);
-        Game updated = gameRepository.findGame(42L).get();
-        updated.getPrisoner().guess("x");
-        gameRepository.update(updated);
+        gameRepository.create(new Game(42L, new Prisoner("foobar")));
+        Game toUpdate = gameRepository.findGame(42L).get();
+        toUpdate.getPrisoner().guess("x");
+
+        gameRepository.save(new Guess("x"));
 
         Game found = gameRepository.findGame(42L).get();
-
-        assertThat(found.getPrisoner(), is(updated.getPrisoner()));
+        assertThat(found.getPrisoner(), is(toUpdate.getPrisoner()));
     }
 
     @Test

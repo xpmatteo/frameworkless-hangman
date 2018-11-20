@@ -83,8 +83,8 @@ public class GameRepository {
 
     @SneakyThrows
     public Optional<Game> findGame(Long gameId) {
-        String sql = "select * from hangman_games where game_id = ?";
         try (Connection connection = dataSource.getConnection()) {
+            String sql = "select * from hangman_games  where game_id = ?";
             ResultSetHandler<Optional<Game>> handler = rs -> {
                 if (!rs.next()) {
                     return Optional.empty();
@@ -92,8 +92,6 @@ public class GameRepository {
 
                 Prisoner prisoner = new Prisoner(rs.getString("word"));
                 set(prisoner, "guessesRemaining", rs.getObject("guesses_remaining"));
-                set(prisoner, "hits", convertStringToCharSet(rs.getString("hits")));
-                set(prisoner, "misses", convertStringToCharSet(rs.getString("misses")));
                 Game game = new Game(gameId, prisoner);
                 return Optional.of(game);
             };
@@ -116,5 +114,20 @@ public class GameRepository {
 
     private String convertCharSetToString(Set<Guess> set) {
         return set.stream().map(Guess::getLetter).sorted().collect(joining());
+    }
+
+    @SneakyThrows
+    public void save(Guess guess) {
+        String sql = "insert into guesses " +
+                "(letter) " +
+                "values" +
+                "(?)";
+        try (Connection connection = dataSource.getConnection()) {
+            new QueryRunner().execute(
+                    connection,
+                    sql,
+                    guess.getLetter()
+            );
+        }
     }
 }
