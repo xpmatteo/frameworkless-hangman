@@ -67,10 +67,10 @@ public class PrisonerTest {
 		assertEquals(0, prisoner.getGuessesRemaining());
 	}
 
-    private Set<String> set(String ... strings) {
-		Set<String> result = new HashSet<String>();
-		for (String string : strings) {
-			result.add(string);
+    private Set<Guess> set(String ... letters) {
+		Set<Guess> result = new HashSet<>();
+		for (String string : letters) {
+			result.add(new Guess(string));
 		}
 		return result;
 	}

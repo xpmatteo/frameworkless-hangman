@@ -16,9 +16,9 @@ public class Prisoner {
 
 	private int guessesRemaining = 18;
 
-	private Set<String> misses = new HashSet<>();
+	private Set<Guess> misses = new HashSet<>();
 
-	private Set<String> hits = new HashSet<>();
+	private Set<Guess> hits = new HashSet<>();
 
 	public Prisoner() {
 		this(new WordList().getRandomWord());
@@ -40,7 +40,7 @@ public class Prisoner {
 		String result = "";
 		for (int i=0; i<word.length(); i++) {
 			String c = word.substring(i, i+1);
-			if (hits.contains(c)) {
+			if (hits.contains(new Guess(c))) {
 				result += c;
 			} else {
 				result += "*";
@@ -49,12 +49,16 @@ public class Prisoner {
 		return result;
 	}
 
-	public void guess(String guess) {
+	public void guess(String letter) {
+		guess(new Guess(letter));
+	}
+
+	public void guess(Guess guess) {
 		if (guessesRemaining == 0) {
 			return;
 		}
 		this.guessesRemaining--;
-		if (word.contains(guess)) {
+		if (word.contains(guess.getLetter())) {
 			hits.add(guess);
 		} else {
 			misses.add(guess);

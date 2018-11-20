@@ -2,6 +2,7 @@ package it.xpug.frameworkless.hangman.db;
 
 import it.xpug.frameworkless.hangman.domain.Game;
 import it.xpug.frameworkless.hangman.domain.GameIdGenerator;
+import it.xpug.frameworkless.hangman.domain.Guess;
 import it.xpug.frameworkless.hangman.domain.Prisoner;
 import lombok.SneakyThrows;
 import org.apache.commons.dbutils.QueryRunner;
@@ -107,13 +108,13 @@ public class GameRepository {
         field.set(target, value);
     }
 
-    private Set<String> convertStringToCharSet(String dbData) {
+    private Set<Guess> convertStringToCharSet(String dbData) {
         if (dbData.isEmpty())
             return new HashSet<>();
-        return stream(dbData.split("")).collect(toSet());
+        return stream(dbData.split("")).map(Guess::new).collect(toSet());
     }
 
-    private String convertCharSetToString(Set<String> set) {
-        return set.stream().sorted().collect(joining());
+    private String convertCharSetToString(Set<Guess> set) {
+        return set.stream().map(Guess::getLetter).sorted().collect(joining());
     }
 }

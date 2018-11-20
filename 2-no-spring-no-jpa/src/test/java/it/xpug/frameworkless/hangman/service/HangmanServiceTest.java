@@ -2,6 +2,7 @@ package it.xpug.frameworkless.hangman.service;
 
 import it.xpug.frameworkless.hangman.db.GameRepository;
 import it.xpug.frameworkless.hangman.domain.Game;
+import it.xpug.frameworkless.hangman.domain.Guess;
 import it.xpug.frameworkless.hangman.domain.Prisoner;
 import it.xpug.frameworkless.hangman.web.ClientError;
 import org.junit.Test;
@@ -81,8 +82,8 @@ public class HangmanServiceTest {
         hangmanService.guess("99", "a");
     }
 
-    private Set<String> setOf(String ... strings) {
-        return stream(strings).collect(toSet());
+    private Set<Guess> setOf(String ... strings) {
+        return stream(strings).map(Guess::new).collect(toSet());
     }
 
     private Game aGame() {

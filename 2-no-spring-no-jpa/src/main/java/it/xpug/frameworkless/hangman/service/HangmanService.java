@@ -2,6 +2,7 @@ package it.xpug.frameworkless.hangman.service;
 
 import it.xpug.frameworkless.hangman.db.GameRepository;
 import it.xpug.frameworkless.hangman.domain.Game;
+import it.xpug.frameworkless.hangman.domain.Guess;
 
 import java.util.Optional;
 
@@ -26,12 +27,12 @@ public class HangmanService {
                 .orElseThrow(() -> new GameNotFoundException(gameId));
     }
 
-    public GameResponse guess(String gameId, String guess) {
-        if (guess.length() != 1)
-            throw new InvalidGuessException(guess);
+    public GameResponse guess(String gameId, String letter) {
+        if (letter.length() != 1)
+            throw new InvalidGuessException(letter);
         Game game = gameRepository.findGame(Long.parseLong(gameId, 16))
                 .orElseThrow(() -> new GameNotFoundException(gameId));
-        game.getPrisoner().guess(guess);
+        game.getPrisoner().guess(new Guess(letter));
         gameRepository.update(game);
         return GameResponse.from(game);
     }

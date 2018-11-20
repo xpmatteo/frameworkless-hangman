@@ -2,13 +2,12 @@ package it.xpug.frameworkless.hangman.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.xpug.frameworkless.hangman.domain.Game;
+import it.xpug.frameworkless.hangman.domain.Guess;
 import it.xpug.frameworkless.hangman.domain.Prisoner;
-import it.xpug.frameworkless.hangman.service.GameResponse;
 import org.junit.Before;
 import org.junit.Test;
 
 import static java.util.Collections.singleton;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
@@ -29,8 +28,8 @@ public class GameResponseTest {
     @Test
     public void createFromGame() throws Exception {
         assertEquals(123L, gameResponse.getGameId());
-        assertEquals(singleton("o"), gameResponse.getHits());
-        assertEquals(singleton("x"), gameResponse.getMisses());
+        assertEquals(singleton(new Guess("o")), gameResponse.getHits());
+        assertEquals(singleton(new Guess("x")), gameResponse.getMisses());
         assertEquals("help", gameResponse.getState());
         assertEquals(16, gameResponse.getGuessesRemaining());
         assertEquals("*ooo***", gameResponse.getWord());
