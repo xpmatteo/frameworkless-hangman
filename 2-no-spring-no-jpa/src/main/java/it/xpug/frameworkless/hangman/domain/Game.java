@@ -1,8 +1,6 @@
 package it.xpug.frameworkless.hangman.domain;
 
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import it.xpug.frameworkless.hangman.util.ToHexSerializer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,7 +8,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Game {
     @Getter
-    @JsonSerialize(using=ToHexSerializer.class)
     private Long gameId;
 
     @Override
