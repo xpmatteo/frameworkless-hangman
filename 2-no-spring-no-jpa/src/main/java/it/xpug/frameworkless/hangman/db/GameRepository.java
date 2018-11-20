@@ -11,9 +11,7 @@ import org.apache.commons.dbutils.ResultSetHandler;
 import javax.sql.DataSource;
 import java.lang.reflect.Field;
 import java.sql.Connection;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.joining;
@@ -84,19 +82,38 @@ public class GameRepository {
     @SneakyThrows
     public Optional<Game> findGame(Long gameId) {
         try (Connection connection = dataSource.getConnection()) {
-            String sql = "select * from hangman_games  where game_id = ?";
-            ResultSetHandler<Optional<Game>> handler = rs -> {
-                if (!rs.next()) {
-                    return Optional.empty();
-                }
-
-                Prisoner prisoner = new Prisoner(rs.getString("word"));
-                set(prisoner, "guessesRemaining", rs.getObject("guesses_remaining"));
-                Game game = new Game(gameId, prisoner);
-                return Optional.of(game);
-            };
-            return new QueryRunner().query(connection, sql, handler, gameId);
+            Optional<Game> game = loadGame(gameId, connection);
+//            List<Guess> guesses = loadGuesses(gameId, connection);
+            return game;
         }
+    }
+
+    @SneakyThrows
+    List<Guess> loadGuesses(Long gameId, Connection connection) {
+        String sql = "select * from guesses where game_id = ?";
+        ResultSetHandler<List<Guess>> handler = rs -> {
+            List<Guess> result = new ArrayList<>();
+            while (rs.next()) {
+                result.add(new Guess(rs.getString("letter")));
+            }
+            return result;
+        };
+        return new QueryRunner().query(connection, sql, handler, gameId);
+    }
+
+    private Optional<Game> loadGame(Long gameId, Connection connection) throws java.sql.SQLException {
+        String sql = "select * from hangman_games  where game_id = ?";
+        ResultSetHandler<Optional<Game>> handler = rs -> {
+            if (!rs.next()) {
+                return Optional.empty();
+            }
+
+            Prisoner prisoner = new Prisoner(rs.getString("word"));
+            set(prisoner, "guessesRemaining", rs.getObject("guesses_remaining"));
+            Game game = new Game(gameId, prisoner);
+            return Optional.of(game);
+        };
+        return new QueryRunner().query(connection, sql, handler, gameId);
     }
 
     @SneakyThrows
@@ -117,15 +134,16 @@ public class GameRepository {
     }
 
     @SneakyThrows
-    public void save(Guess guess) {
+    public void save(long gameId, Guess guess) {
         String sql = "insert into guesses " +
-                "(letter) " +
+                "(game_id, letter) " +
                 "values" +
-                "(?)";
+                "(?, ?)";
         try (Connection connection = dataSource.getConnection()) {
             new QueryRunner().execute(
                     connection,
                     sql,
+                    gameId,
                     guess.getLetter()
             );
         }

@@ -27,15 +27,16 @@ public class HangmanService {
                 .orElseThrow(() -> new GameNotFoundException(gameId));
     }
 
-    public GameResponse guess(String gameId, String letter) {
+    public GameResponse guess(String gameIdAsString, String letter) {
         if (letter.length() != 1)
             throw new InvalidGuessException(letter);
-        Game game = gameRepository.findGame(Long.parseLong(gameId, 16))
-                .orElseThrow(() -> new GameNotFoundException(gameId));
+        long gameId = Long.parseLong(gameIdAsString, 16);
+        Game game = gameRepository.findGame(gameId)
+                .orElseThrow(() -> new GameNotFoundException(gameIdAsString));
         Guess guess = new Guess(letter);
         game.getPrisoner().guess(guess);
         gameRepository.update(game);
-        gameRepository.save(guess);
+        gameRepository.save(gameId, guess);
         return GameResponse.from(game);
     }
 }
