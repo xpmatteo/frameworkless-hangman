@@ -60,14 +60,21 @@ public class HangmanServiceTest {
     }
 
     @Test
-    public void guess_ok() throws Exception {
-        Game foundGame = aGame("word");
-        when(gameRepository.findGame(0x99L)).thenReturn(Optional.of(foundGame));
+    public void guess_isApplied() throws Exception {
+        when(gameRepository.findGame(0x99L)).thenReturn(Optional.of(aGame("word")));
 
         GameResponse gameResponse = hangmanService.guess("99", "x");
 
-        assertThat(gameResponse.getHits(), is(setOf()));
         assertThat(gameResponse.getMisses(), is(setOf("x")));
+    }
+
+    @Test
+    public void guess_isSaved() throws Exception {
+        when(gameRepository.findGame(0x44L)).thenReturn(Optional.of(aGame()));
+
+        hangmanService.guess("44", "o");
+
+        verify(gameRepository).save(0x44L, new Guess("o"));
     }
 
     @Test(expected = InvalidGuessException.class)
