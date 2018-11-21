@@ -4,7 +4,7 @@ set -e
 cd $(dirname $0)/..
 
 if [ "$1" != "--no-gradle" ]; then
-  ./gradlew shadowJar -x test
+  ./gradlew shadowJar -x test --console=plain
 fi
 
 exec java \

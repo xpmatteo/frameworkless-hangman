@@ -13,9 +13,10 @@ function server_is_gone {
 
 function wait_until {
   n=0
-  max=20
+  max=40
   until "$@"; do
     if [[ $(( n++ )) = $max ]]; then
+      echo "TIMEOUT waiting for $@"
       return 1
     fi
     echo -n .
@@ -31,7 +32,9 @@ fi
 for d in 0-spring-jpa 1-spring-without-jpa 2-no-spring-no-jpa
 do (
     cd $d
+    echo "--------------------------- doing $d --------------------------------"
     echo "" | script/create-local-databases.sh
+    ./gradlew clean test --console=plain
     script/run-locally.sh --logging.level.root=WARN &
     pid=$!
     wait_until server_is_live

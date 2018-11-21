@@ -1,17 +1,26 @@
 language: java
+
 jdk:
   - oraclejdk8
+
 services:
   - mysql
+
 before_script:
   - chmod +x */gradlew
+
 install: true
+
 script:
   - script/ci.sh
+
 cache:
   directories:
-  - $HOME/.gradle/wrapper
-  - $HOME/.gradle/caches
-  - $HOME/.gradle/native
+    - $HOME/.gradle/wrapper
+    - $HOME/.gradle/caches
+    - $HOME/.gradle/native
 
-
+notifications:
+  email:
+    recipients:
+      - vaccari@pobox.com
