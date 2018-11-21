@@ -35,7 +35,7 @@ do (
     echo "--------------------------- doing $d --------------------------------"
     echo "" | script/create-local-databases.sh
     ./gradlew clean test --console=plain
-    script/run-locally.sh --logging.level.root=WARN &
+    script/run-locally.sh --logging.level.root=WARN --spring.main.banner_mode=off &
     pid=$!
     wait_until server_is_live
     echo "$d: running"
