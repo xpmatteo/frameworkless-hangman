@@ -57,4 +57,11 @@ public class WebRequest {
         return matcher.matches();
     }
 
+    public String getIpAddress() {
+        return httpServletRequest.getRemoteAddr();
+    }
+
+    public String getForwardedFor() {
+        return httpServletRequest.getHeader("x-forwarded-for");
+    }
 }

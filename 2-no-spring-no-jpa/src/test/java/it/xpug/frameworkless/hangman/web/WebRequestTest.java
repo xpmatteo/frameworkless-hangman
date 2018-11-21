@@ -63,4 +63,17 @@ public class WebRequestTest {
         webRequest.getMandatoryParameter("y");
     }
 
+    @Test
+    public void getIpAddress() throws Exception {
+        when(httpServletRequest.getRemoteAddr()).thenReturn("2.3.4.5");
+
+        assertThat(webRequest.getIpAddress(), is("2.3.4.5"));
+    }
+
+    @Test
+    public void getForwardedFor() throws Exception {
+        when(httpServletRequest.getHeader("x-forwarded-for")).thenReturn("abc");
+
+        assertThat(webRequest.getForwardedFor(), is("abc"));
+    }
 }

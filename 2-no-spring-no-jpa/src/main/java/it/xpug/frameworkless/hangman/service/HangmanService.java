@@ -3,6 +3,7 @@ package it.xpug.frameworkless.hangman.service;
 import it.xpug.frameworkless.hangman.db.GameRepository;
 import it.xpug.frameworkless.hangman.domain.Game;
 import it.xpug.frameworkless.hangman.domain.Guess;
+import it.xpug.frameworkless.hangman.web.GuessRequest;
 
 import java.util.Optional;
 
