@@ -73,7 +73,7 @@ public class HangmanRouterTest {
     @Test
     public void guess() throws Exception {
         post("/hangman/game/123/guesses", "guess", "x");
-        when(hangmanService.guess("123", "x")).thenReturn(aGameResponse);
+        when(hangmanService.guess(new GuessRequest("123", "x"))).thenReturn(aGameResponse);
 
         hangmanRouter.route();
 

@@ -40,13 +40,12 @@ public class HangmanRouter {
 
     private void doRoute() throws IOException {
         if (webRequest.isPost("/hangman/game/([a-f0-9]+)/guesses")) {
-            String gameId = webRequest.getPathParameter(1);
-            String guess = webRequest.getMandatoryParameter("guess");
-            GameResponse gameResponse = hangmanService.guess(gameId, guess);
+            GameResponse gameResponse = hangmanService.guess(GuessRequest.from(webRequest));
             webResponse.respond(SC_OK, gameResponse);
 
         } else if (webRequest.isGet("/hangman/game/([a-f0-9]+)")) {
-            webResponse.respond(SC_OK, hangmanService.findGame(webRequest.getPathParameter(1)));
+            GameResponse gameResponse = hangmanService.findGame(webRequest.getPathParameter(1));
+            webResponse.respond(SC_OK, gameResponse);
 
         } else if (webRequest.isPost("/hangman/game")) {
             GameResponse gameResponse = hangmanService.createNewGame(webRequest.getOptionalParameter("word"));

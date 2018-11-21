@@ -5,6 +5,7 @@ import it.xpug.frameworkless.hangman.domain.Game;
 import it.xpug.frameworkless.hangman.domain.Guess;
 import it.xpug.frameworkless.hangman.domain.Prisoner;
 import it.xpug.frameworkless.hangman.web.ClientError;
+import it.xpug.frameworkless.hangman.web.GuessRequest;
 import org.junit.Test;
 
 import java.util.Optional;
@@ -63,7 +64,7 @@ public class HangmanServiceTest {
     public void guess_isApplied() throws Exception {
         when(gameRepository.findGame(0x99L)).thenReturn(Optional.of(aGame("word")));
 
-        GameResponse gameResponse = hangmanService.guess("99", "x");
+        GameResponse gameResponse = hangmanService.guess(new GuessRequest("99", "x"));
 
         assertThat(gameResponse.getMisses(), is(setOf("x")));
     }
@@ -72,21 +73,16 @@ public class HangmanServiceTest {
     public void guess_isSaved() throws Exception {
         when(gameRepository.findGame(0x44L)).thenReturn(Optional.of(aGame()));
 
-        hangmanService.guess("44", "o");
+        hangmanService.guess(new GuessRequest("44", "o"));
 
         verify(gameRepository).save(0x44L, new Guess("o"));
-    }
-
-    @Test(expected = InvalidGuessException.class)
-    public void guess_parameterTooBig() throws Exception {
-        hangmanService.guess("99", "ab");
     }
 
     @Test(expected = GameNotFoundException.class)
     public void guess_notFound() throws Exception {
         when(gameRepository.findGame(anyLong())).thenReturn(Optional.empty());
 
-        hangmanService.guess("99", "a");
+        hangmanService.guess(new GuessRequest("99", "a"));
     }
 
     private Set<Guess> setOf(String ... strings) {

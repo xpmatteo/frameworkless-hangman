@@ -1,6 +1,4 @@
-package it.xpug.frameworkless.hangman.service;
-
-import it.xpug.frameworkless.hangman.web.ClientError;
+package it.xpug.frameworkless.hangman.web;
 
 import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 
