@@ -16,6 +16,7 @@ function wait_until {
   max=20
   until "$@"; do
     if [[ $(( n++ )) = $max ]]; then
+      echo "TIMEOUT waiting for $@"
       return 1
     fi
     echo -n .
@@ -33,7 +34,7 @@ do (
     cd $d
     echo "--------------------------- doing $d --------------------------------"
     echo "" | script/create-local-databases.sh
-    ./gradlew clean
+    ./gradlew clean --console=plain
     script/run-locally.sh --logging.level.root=WARN &
     pid=$!
     wait_until server_is_live
