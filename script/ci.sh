@@ -34,7 +34,7 @@ do (
     cd $d
     echo "--------------------------- doing $d --------------------------------"
     echo "" | script/create-local-databases.sh
-    ./gradlew clean --console=plain
+    ./gradlew clean test --console=plain
     script/run-locally.sh --logging.level.root=WARN &
     pid=$!
     wait_until server_is_live
