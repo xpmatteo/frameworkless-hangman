@@ -32,7 +32,7 @@ public class HangmanService {
         Game game = gameRepository.findGame(gameId)
                 .orElseThrow(GameNotFoundException::new);
         game.getPrisoner().guess(guessRequest.getGuess());
-        gameRepository.save(gameId, guessRequest.getGuess());
+        gameRepository.save(guessRequest);
         return GameResponse.from(game);
     }
 }

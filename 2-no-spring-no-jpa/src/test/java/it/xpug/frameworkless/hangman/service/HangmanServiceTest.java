@@ -72,10 +72,11 @@ public class HangmanServiceTest {
     @Test
     public void guess_isSaved() throws Exception {
         when(gameRepository.findGame(0x44L)).thenReturn(Optional.of(aGame()));
+        GuessRequest guessRequest = new GuessRequest("44", "o");
 
-        hangmanService.guess(new GuessRequest("44", "o"));
+        hangmanService.guess(guessRequest);
 
-        verify(gameRepository).save(0x44L, new Guess("o"));
+        verify(gameRepository).save(guessRequest);
     }
 
     @Test(expected = GameNotFoundException.class)

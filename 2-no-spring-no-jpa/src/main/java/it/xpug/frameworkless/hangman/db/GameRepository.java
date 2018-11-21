@@ -4,6 +4,7 @@ import it.xpug.frameworkless.hangman.domain.Game;
 import it.xpug.frameworkless.hangman.domain.GameIdGenerator;
 import it.xpug.frameworkless.hangman.domain.Guess;
 import it.xpug.frameworkless.hangman.domain.Prisoner;
+import it.xpug.frameworkless.hangman.web.GuessRequest;
 import lombok.SneakyThrows;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
@@ -118,18 +119,20 @@ public class GameRepository {
     }
 
     @SneakyThrows
-    public void save(long gameId, Guess guess) {
+    public void save(GuessRequest guessRequest) {
         String sql = "" +
                 "insert into guesses " +
-                " (game_id, letter) " +
+                " (game_id, letter, ip_address, forwarded_for) " +
                 " values " +
-                " (?, ?) ";
+                " (?, ?, ?, ?) ";
         try (Connection connection = dataSource.getConnection()) {
             new QueryRunner().execute(
                     connection,
                     sql,
-                    gameId,
-                    guess.getLetter()
+                    guessRequest.getGameId(),
+                    guessRequest.getGuess().getLetter(),
+                    guessRequest.getIpAddress(),
+                    guessRequest.getForwardedFor()
             );
         }
     }

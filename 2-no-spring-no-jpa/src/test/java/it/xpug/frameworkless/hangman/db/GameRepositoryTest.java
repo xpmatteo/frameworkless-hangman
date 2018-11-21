@@ -4,7 +4,9 @@ import it.xpug.frameworkless.hangman.domain.Game;
 import it.xpug.frameworkless.hangman.domain.GameIdGenerator;
 import it.xpug.frameworkless.hangman.domain.Guess;
 import it.xpug.frameworkless.hangman.domain.Prisoner;
+import it.xpug.frameworkless.hangman.web.GuessRequest;
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.MapHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -13,10 +15,16 @@ import org.junit.Test;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Optional;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.singleton;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -73,7 +81,7 @@ public class GameRepositoryTest {
     }
 
     @Test
-    public void saveAndLoad() throws Exception {
+    public void saveGameAndLoad() throws Exception {
         Game original = new Game(42L, new Prisoner("foobar"));
         gameRepository.create(original);
 
@@ -85,22 +93,35 @@ public class GameRepositoryTest {
 
     @Test
     public void updateGame() throws Exception {
-        gameRepository.create(new Game(42L, new Prisoner("foobar")));
-        Game toUpdate = gameRepository.findGame(42L).get();
-        toUpdate.getPrisoner().guess("x");
+        gameRepository.create(new Game(0x42L, new Prisoner("foobar")));
 
-        gameRepository.save(42L, new Guess("x"));
+        gameRepository.save(new GuessRequest("42", "x"));
 
-        Game found = gameRepository.findGame(42L).get();
-        assertThat(found.getPrisoner(), is(toUpdate.getPrisoner()));
+        Game found = gameRepository.findGame(0x42L).get();
+        assertThat(found.getPrisoner().getMisses(), is(singleton(new Guess("x"))));
+    }
+
+    @Test
+    public void saveGuess() throws Exception {
+        gameRepository.save(new GuessRequest("20", "a", "1.2.3.4", "2.3.4.5"));
+
+        String sql = "select * from guesses where game_id = 32";
+        Map<String, Object> result = query(sql);
+        assertThat("not found", result, is(notNullValue()));
+        assertThat(result.get("game_id"), is(32L));
+        assertThat(result.get("letter"), is("a"));
+        assertThat(result.get("ip_address"), is("1.2.3.4"));
+        assertThat(result.get("forwarded_for"), is("2.3.4.5"));
+        assertThat(result.get("created_at"), is(notNullValue()));
+        assertThat(result.get("updated_at"), is(result.get("created_at")));
     }
 
     @Test
     public void loadGuesses() throws Exception {
-        gameRepository.save(123L, new Guess("x"));
-        gameRepository.save(123L, new Guess("y"));
+        gameRepository.save(new GuessRequest("123", "x"));
+        gameRepository.save(new GuessRequest("123", "y"));
 
-        assertThat(gameRepository.loadGuesses(123L, connection), is(asList(new Guess("x"), new Guess("y"))));
+        assertThat(gameRepository.loadGuesses(0x123L, connection), is(asList(new Guess("x"), new Guess("y"))));
     }
 
     @Test
@@ -117,6 +138,10 @@ public class GameRepositoryTest {
 
     private Object select(String sql) throws SQLException {
         return new QueryRunner().query(connection, sql, new ScalarHandler<>());
+    }
+
+    private Map<String, Object> query(String sql) throws SQLException {
+        return new QueryRunner(dataSource).query(sql, new MapHandler());
     }
 
 
