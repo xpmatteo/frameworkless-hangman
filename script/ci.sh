@@ -31,7 +31,9 @@ fi
 for d in 0-spring-jpa 1-spring-without-jpa 2-no-spring-no-jpa
 do (
     cd $d
+    echo "--------------------------- doing $d --------------------------------"
     echo "" | script/create-local-databases.sh
+    ./gradlew clean
     script/run-locally.sh --logging.level.root=WARN &
     pid=$!
     wait_until server_is_live

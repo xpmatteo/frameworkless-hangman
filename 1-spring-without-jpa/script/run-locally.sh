@@ -8,4 +8,4 @@ if [ "$1" != "--no-gradle" ]; then
 fi
 
 exec java \
-  -jar "build/libs/hangman-0.0.1-SNAPSHOT.jar" $*
+  -jar "build/libs/hangman1-0.0.1-SNAPSHOT.jar" $*
