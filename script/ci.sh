@@ -13,7 +13,7 @@ function server_is_gone {
 
 function wait_until {
   n=0
-  max=20
+  max=40
   until "$@"; do
     if [[ $(( n++ )) = $max ]]; then
       echo "TIMEOUT waiting for $@"
