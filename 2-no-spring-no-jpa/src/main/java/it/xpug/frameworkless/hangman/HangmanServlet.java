@@ -22,10 +22,10 @@ public class HangmanServlet extends HttpServlet {
         GameRepository gameRepository = new GameRepository(gameIdGenerator, dataSource);
         HangmanService hangmanService = new HangmanService(gameRepository);
 
+        HangmanRouter hangmanRouter = new HangmanRouter(hangmanService);
+
         WebRequest webRequest = new WebRequest(request);
         WebResponse webResponse = new WebResponse(response);
-        HangmanRouter hangmanRouter = new HangmanRouter(webRequest, webResponse, hangmanService);
-
-        hangmanRouter.route();
+        hangmanRouter.route(webRequest, webResponse);
     }
 }

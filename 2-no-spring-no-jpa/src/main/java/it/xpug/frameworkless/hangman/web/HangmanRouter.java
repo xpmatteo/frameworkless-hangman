@@ -5,7 +5,6 @@ import it.xpug.frameworkless.hangman.service.HangmanService;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.util.regex.Matcher;
 
 import static javax.servlet.http.HttpServletResponse.SC_CREATED;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
@@ -17,19 +16,15 @@ import static javax.servlet.http.HttpServletResponse.SC_OK;
  */
 @Slf4j
 public class HangmanRouter {
-    private final WebRequest webRequest;
-    private final WebResponse webResponse;
     private final HangmanService hangmanService;
 
-    public HangmanRouter(WebRequest webRequest, WebResponse webResponse, HangmanService hangmanService) {
-        this.webRequest = webRequest;
-        this.webResponse = webResponse;
+    public HangmanRouter(HangmanService hangmanService) {
         this.hangmanService = hangmanService;
     }
 
-    public void route() throws IOException {
+    public void route(WebRequest webRequest, WebResponse webResponse) throws IOException {
         try {
-            doRoute();
+            doRoute(webRequest, webResponse);
         } catch (ClientError e) {
             webResponse.clientError(e);
         } catch (Exception e) {
@@ -38,7 +33,7 @@ public class HangmanRouter {
         }
     }
 
-    private void doRoute() throws IOException {
+    private void doRoute(WebRequest webRequest, WebResponse webResponse) throws IOException {
         if (webRequest.isPost("/hangman/game/([a-f0-9]+)/guesses")) {
             GameResponse gameResponse = hangmanService.guess(GuessRequest.from(webRequest));
             webResponse.respond(SC_OK, gameResponse);
