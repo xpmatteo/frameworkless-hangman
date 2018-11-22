@@ -27,6 +27,25 @@ public class GameRepository {
         this.dataSource = dataSource;
     }
 
+    @SneakyThrows
+    public void save(GuessRequest guessRequest) {
+        String sql = "" +
+                "insert into guesses " +
+                " (game_id, letter, ip_address, forwarded_for) " +
+                " values " +
+                " (?, ?, ?, ?) ";
+        try (Connection connection = dataSource.getConnection()) {
+            new QueryRunner().execute(
+                    connection,
+                    sql,
+                    guessRequest.getGameId(),
+                    guessRequest.getGuess().getLetter(),
+                    guessRequest.getIpAddress(),
+                    guessRequest.getForwardedFor()
+            );
+        }
+    }
+
     public Game createNewGame() {
         Game newGame = new Game(gameIdGenerator.generateGameId(), new Prisoner());
         return create(newGame);
@@ -108,32 +127,7 @@ public class GameRepository {
         field.set(target, value);
     }
 
-    private Set<Guess> convertStringToCharSet(String dbData) {
-        if (dbData.isEmpty())
-            return new HashSet<>();
-        return stream(dbData.split("")).map(Guess::new).collect(toSet());
-    }
-
     private String convertCharSetToString(Set<Guess> set) {
         return set.stream().map(Guess::getLetter).sorted().collect(joining());
-    }
-
-    @SneakyThrows
-    public void save(GuessRequest guessRequest) {
-        String sql = "" +
-                "insert into guesses " +
-                " (game_id, letter, ip_address, forwarded_for) " +
-                " values " +
-                " (?, ?, ?, ?) ";
-        try (Connection connection = dataSource.getConnection()) {
-            new QueryRunner().execute(
-                    connection,
-                    sql,
-                    guessRequest.getGameId(),
-                    guessRequest.getGuess().getLetter(),
-                    guessRequest.getIpAddress(),
-                    guessRequest.getForwardedFor()
-            );
-        }
     }
 }

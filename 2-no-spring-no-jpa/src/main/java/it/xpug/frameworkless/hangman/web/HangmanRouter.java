@@ -5,6 +5,7 @@ import it.xpug.frameworkless.hangman.service.HangmanService;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import static javax.servlet.http.HttpServletResponse.SC_CREATED;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
@@ -35,15 +36,18 @@ public class HangmanRouter {
 
     private void doRoute(WebRequest webRequest, WebResponse webResponse) throws IOException {
         if (webRequest.isPost("/hangman/game/([a-f0-9]+)/guesses")) {
-            GameResponse gameResponse = hangmanService.guess(GuessRequest.from(webRequest));
+            GuessRequest guessRequest = GuessRequest.from(webRequest);
+            GameResponse gameResponse = hangmanService.guess(guessRequest);
             webResponse.respond(SC_OK, gameResponse);
 
         } else if (webRequest.isGet("/hangman/game/([a-f0-9]+)")) {
-            GameResponse gameResponse = hangmanService.findGame(webRequest.getPathParameter(1));
+            String gameId = webRequest.getPathParameter(1);
+            GameResponse gameResponse = hangmanService.findGame(gameId);
             webResponse.respond(SC_OK, gameResponse);
 
         } else if (webRequest.isPost("/hangman/game")) {
-            GameResponse gameResponse = hangmanService.createNewGame(webRequest.getOptionalParameter("word"));
+            Optional<String> optionalWord = webRequest.getOptionalParameter("word");
+            GameResponse gameResponse = hangmanService.createNewGame(optionalWord);
             webResponse.respond(SC_CREATED, gameResponse);
 
         } else {

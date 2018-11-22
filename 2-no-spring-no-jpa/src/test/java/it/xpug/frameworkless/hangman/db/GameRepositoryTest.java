@@ -108,7 +108,7 @@ public class GameRepositoryTest {
         String sql = "select * from guesses where game_id = 32";
         Map<String, Object> result = query(sql);
         assertThat("not found", result, is(notNullValue()));
-        assertThat(result.get("game_id"), is(32L));
+        assertThat(result.get("game_id"), is(0x20L));
         assertThat(result.get("letter"), is("a"));
         assertThat(result.get("ip_address"), is("1.2.3.4"));
         assertThat(result.get("forwarded_for"), is("2.3.4.5"));

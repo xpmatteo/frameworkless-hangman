@@ -13,6 +13,17 @@ public class HangmanService {
         this.gameRepository = gameRepository;
     }
 
+    public GameResponse guess(GuessRequest guessRequest) {
+        Long gameId = guessRequest.getGameId();
+        Game game = gameRepository.findGame(gameId)
+                .orElseThrow(GameNotFoundException::new);
+
+        game.getPrisoner().guess(guessRequest.getGuess());
+
+        gameRepository.save(guessRequest);
+        return GameResponse.from(game);
+    }
+
     public GameResponse createNewGame(Optional<String> optionalWord) {
         Game newGame = optionalWord
                 .map(word -> gameRepository.createNewGame(word))
@@ -25,14 +36,5 @@ public class HangmanService {
         return gameRepository.findGame(gameIdAsLong)
                 .map(GameResponse::from)
                 .orElseThrow(GameNotFoundException::new);
-    }
-
-    public GameResponse guess(GuessRequest guessRequest) {
-        Long gameId = guessRequest.getGameId();
-        Game game = gameRepository.findGame(gameId)
-                .orElseThrow(GameNotFoundException::new);
-        game.getPrisoner().guess(guessRequest.getGuess());
-        gameRepository.save(guessRequest);
-        return GameResponse.from(game);
     }
 }
