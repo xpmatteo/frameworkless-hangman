@@ -12,11 +12,9 @@ import org.apache.commons.dbutils.ResultSetHandler;
 import javax.sql.DataSource;
 import java.lang.reflect.Field;
 import java.sql.Connection;
-import java.util.*;
-
-import static java.util.Arrays.stream;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toSet;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class GameRepository {
     private GameIdGenerator gameIdGenerator;
@@ -58,20 +56,18 @@ public class GameRepository {
 
     @SneakyThrows
     public Game create(Game game) {
-        String sql = "insert into hangman_games " +
-                "(game_id, word, guesses_remaining, hits, misses) " +
-                "values" +
-                "(?, ?, ?, ?, ?)";
+        String sql = "" +
+                " insert into hangman_games " +
+                " (game_id, word) " +
+                " values" +
+                " (?, ?)";
         try (Connection connection = dataSource.getConnection()) {
             Prisoner prisoner = game.getPrisoner();
             new QueryRunner().execute(
                     connection,
                     sql,
                     game.getGameId(),
-                    prisoner.getWord(),
-                    prisoner.getGuessesRemaining(),
-                    convertCharSetToString(prisoner.getHits()),
-                    convertCharSetToString(prisoner.getMisses())
+                    prisoner.getWord()
             );
         }
         return game;
@@ -113,21 +109,9 @@ public class GameRepository {
             }
 
             Prisoner prisoner = new Prisoner(rs.getString("word"));
-            set(prisoner, "guessesRemaining", rs.getObject("guesses_remaining"));
             Game game = new Game(gameId, prisoner);
             return Optional.of(game);
         };
         return new QueryRunner().query(connection, sql, handler, gameId);
-    }
-
-    @SneakyThrows
-    private void set(Object target, String fieldName, Object value) {
-        Field field = target.getClass().getDeclaredField(fieldName);
-        field.setAccessible(true);
-        field.set(target, value);
-    }
-
-    private String convertCharSetToString(Set<Guess> set) {
-        return set.stream().map(Guess::getLetter).sorted().collect(joining());
     }
 }
