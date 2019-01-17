@@ -9,7 +9,9 @@ The goal is to show how to start with a typical Spring/JPA app and remove Spring
 
 If you know how to replace Spring/JPA features, then you're in a position to make an informed decision whether these frameworks are worth using for you or not.  If you don't know how to replace Spring and JPA with plain servlets and JDBC, then you don't have a choice.  My goal is to help you have a choice.
 
-See more information about the [Frameworkless movement](https://github.com/frameworkless-movement/manifesto)
+This [annotated slide deck](https://www.slideshare.net/xpmatteo/going-frameworkless-in-the-backend) will provide a better introduction to the concepts.
+
+See more information about the [Frameworkless movement](https://github.com/frameworkless-movement/manifesto).
 
 
 
