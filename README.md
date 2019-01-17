@@ -11,6 +11,8 @@ If you know how to replace Spring/JPA features, then you're in a position to mak
 
 This [annotated slide deck](https://www.slideshare.net/xpmatteo/going-frameworkless-in-the-backend) will provide a better introduction to the concepts.
 
+There is [an Italian-language video](https://vimeo.com/307450706) of me presenting this stuff at Italian Agile Days.  An English-language video will hopefully be available when Codemotion puts it online.
+
 See more information about the [Frameworkless movement](https://github.com/frameworkless-movement/manifesto).
 
 
